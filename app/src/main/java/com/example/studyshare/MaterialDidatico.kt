@@ -1,0 +1,13 @@
+package com.example.studyshare
+
+data class MaterialDidatico(
+    val id: Int? = null,
+    val titulo: String,
+    val descricao: String? = null,
+    val tipo: String,
+    val categoria_id: Int? = null,
+    val autor_id: Int,
+    val data_criacao: String? = null,
+    val privado: Boolean? = false
+)
+
