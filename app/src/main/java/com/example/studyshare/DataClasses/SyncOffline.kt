@@ -1,4 +1,4 @@
-package com.example.studyshare
+package com.example.studyshare.DataClasses
 
 data class SyncOffline(
     val id: Int? = null,

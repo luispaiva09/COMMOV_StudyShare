@@ -2,7 +2,6 @@ package com.example.studyshare
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL = "https://zktwurzgnafkwxqfwmjj.supabase.co/rest/v1/"
@@ -26,11 +25,10 @@ object RetrofitClient {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
-    val api: SupaBaseAPI by lazy {
-        retrofit.create(SupaBaseAPI::class.java)
+    val api: ApiService by lazy {
+        retrofit.create(ApiService::class.java)
     }
 }
