@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             val nome = binding.etNome.text.toString().trim().takeIf { it.isNotEmpty() }
             val nTelemovel = binding.etNTelemovel.text.toString().toIntOrNull()
             val estado = "ativo"
-            val dataRegisto = ""
+            val dataRegisto: String? = null
             val ultimoLogin: String? = null
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {

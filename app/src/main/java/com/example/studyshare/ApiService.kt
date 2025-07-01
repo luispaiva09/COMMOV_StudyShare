@@ -11,6 +11,7 @@ import com.example.studyshare.DataClasses.ParticipanteSessao
 import com.example.studyshare.DataClasses.SessaoEstudo
 import com.example.studyshare.DataClasses.SyncOffline
 import com.example.studyshare.DataClasses.Utilizador
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -29,7 +30,7 @@ interface ApiService {
     suspend fun getUtilizadorById(@Path("id") id: Int): Utilizador
 
     @POST("utilizadores")
-    suspend fun createUtilizador(@Body utilizador: Utilizador): Utilizador
+    suspend fun createUtilizador(@Body utilizador: Utilizador): Response<Unit>
 
     @PUT("utilizadores/{id}")
     suspend fun updateUtilizador(@Path("id") id: Int, @Body utilizador: Utilizador): Utilizador

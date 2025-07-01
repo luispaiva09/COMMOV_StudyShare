@@ -6,7 +6,7 @@ data class Utilizador(
     val email: String,
     val password: String,
     val tipo_utilizador: String,
-    val data_registo: String,
+    val data_registo: String? = null,
     val morada: String? = null,
     val nome: String? = null,
     val n_telemovel: Int? = null,
