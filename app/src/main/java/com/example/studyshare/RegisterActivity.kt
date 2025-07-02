@@ -1,5 +1,6 @@
 package com.example.studyshare
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -10,13 +11,13 @@ import com.example.studyshare.DataClasses.Utilizador
 import com.example.studyshare.Repositories.UtilizadorRepository
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModels.UtilizadorViewModel
-import com.example.studyshare.databinding.ActivityMainBinding
+import com.example.studyshare.databinding.ActivityRegisterBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityRegisterBinding
 
     // Criar o repository e o ViewModel com o factory
     private val repository = UtilizadorRepository(RetrofitClient.api)
@@ -24,15 +25,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         lifecycleScope.launch {
             viewModel.registoSucesso.collectLatest { sucesso ->
                 sucesso?.let {
                     if (it) {
-                        Toast.makeText(this@MainActivity, "Registo efetuado com sucesso!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@RegisterActivity, "Registo efetuado com sucesso!", Toast.LENGTH_LONG).show()
                         limparCampos()
+
+                        val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }
                 }
             }
@@ -42,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.erroMensagem.collectLatest { erro ->
                 erro?.let {
                     Log.e("MainActivity", "Erro ao registar: $it")
-                    Toast.makeText(this@MainActivity, "Erro: $it", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RegisterActivity, "Erro: $it", Toast.LENGTH_LONG).show()
                 }
             }
         }

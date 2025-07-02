@@ -18,6 +18,18 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
+
+data class LoginRequest(
+    val p_username: String,
+    val p_password: String
+)
+
+data class LoginResponse(
+    val id: Int,
+    val username: String,
+    val email: String
+)
 
 interface ApiService {
 
@@ -38,6 +50,22 @@ interface ApiService {
     @DELETE("utilizadores/{id}")
     suspend fun deleteUtilizador(@Path("id") id: Int)
 
+    @GET("utilizadores")
+    suspend fun verificarUsernameExistente(
+        @Query("username") username: String,
+        @Query("select") select: String = "id"
+    ): List<Utilizador>
+
+    @GET("utilizadores")
+    suspend fun verificarEmailExistente(
+        @Query("email") email: String,
+        @Query("select") select: String = "id"
+    ): List<Utilizador>
+
+    @POST("rpc/login_utilizador")
+    suspend fun loginUtilizador(
+        @Body loginRequest: LoginRequest
+    ): List<LoginResponse>
 
     // MATERIAIS DIDATICOS
 
