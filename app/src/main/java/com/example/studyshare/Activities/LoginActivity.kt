@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, InicioActivity::class.java)
                     intent.putExtra("username", utilizador.username)
-                    intent.putExtra("username", utilizador.id)
+                    intent.putExtra("userId", utilizador.id)
                     startActivity(intent)
                     finish()
                 }

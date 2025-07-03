@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.Categoria
+import retrofit2.Response
 
 class CategoriaRepository(private val api: ApiService) {
 
@@ -13,7 +14,7 @@ class CategoriaRepository(private val api: ApiService) {
         return api.getCategoriaById(id)
     }
 
-    suspend fun criarCategoria(categoria: Categoria): Categoria {
+    suspend fun criarCategoria(categoria: Categoria): List<Categoria> {
         return api.createCategoria(categoria)
     }
 

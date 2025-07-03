@@ -15,6 +15,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -76,7 +77,7 @@ interface ApiService {
     suspend fun getMaterialDidaticoById(@Path("id") id: Int): MaterialDidatico
 
     @POST("materiaisdidaticos")
-    suspend fun createMaterialDidatico(@Body material: MaterialDidatico): MaterialDidatico
+    suspend fun createMaterialDidatico(@Body material: MaterialDidatico): Response<MaterialDidatico>
 
     @PUT("materiaisdidaticos/{id}")
     suspend fun updateMaterialDidatico(@Path("id") id: Int, @Body material: MaterialDidatico): MaterialDidatico
@@ -93,8 +94,9 @@ interface ApiService {
     @GET("categorias/{id}")
     suspend fun getCategoriaById(@Path("id") id: Int): Categoria
 
+    @Headers("Prefer: return=representation")
     @POST("categorias")
-    suspend fun createCategoria(@Body categoria: Categoria): Categoria
+    suspend fun createCategoria(@Body categoria: Categoria): List<Categoria>
 
     @PUT("categorias/{id}")
     suspend fun updateCategoria(@Path("id") id: Int, @Body categoria: Categoria): Categoria

@@ -17,11 +17,16 @@ class InicioActivity : AppCompatActivity() {
         val username = intent.getStringExtra("username") ?: "Utilizador"
         binding.textViewWelcome.text = "Bem-vindo, $username!"
 
-        val userId = intent.getIntExtra("id", "") ?: "Utilizador"
+        val userId = intent.getIntExtra("userId", -1)
 
         binding.buttonContinuar.setOnClickListener {
             val intent = Intent(this, AddMaterialActivity::class.java)
             intent.putExtra("userId", userId)
+            startActivity(intent)
+        }
+
+        binding.buttonCategoria.setOnClickListener {
+            val intent = Intent(this, AddCategoriaActivity::class.java)
             startActivity(intent)
         }
 

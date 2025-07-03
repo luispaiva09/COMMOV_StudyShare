@@ -36,6 +36,10 @@
             android:name=".Activities.AddMaterialActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.AddCategoriaActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

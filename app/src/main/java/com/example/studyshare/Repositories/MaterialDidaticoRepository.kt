@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.MaterialDidatico
+import retrofit2.Response
 
 class MaterialDidaticoRepository(private val api: ApiService) {
 
@@ -13,7 +14,7 @@ class MaterialDidaticoRepository(private val api: ApiService) {
         return api.getMaterialDidaticoById(id)
     }
 
-    suspend fun criarMaterial(material: MaterialDidatico): MaterialDidatico {
+    suspend fun criarMaterial(material: MaterialDidatico): Response<MaterialDidatico> {
         return api.createMaterialDidatico(material)
     }
 
