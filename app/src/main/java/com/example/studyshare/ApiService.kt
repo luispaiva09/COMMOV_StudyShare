@@ -76,8 +76,9 @@ interface ApiService {
     @GET("materiaisdidaticos/{id}")
     suspend fun getMaterialDidaticoById(@Path("id") id: Int): MaterialDidatico
 
+    @Headers("Prefer: return=representation")
     @POST("materiaisdidaticos")
-    suspend fun createMaterialDidatico(@Body material: MaterialDidatico): Response<MaterialDidatico>
+    suspend fun createMaterialDidatico(@Body material: MaterialDidatico): List<MaterialDidatico>
 
     @PUT("materiaisdidaticos/{id}")
     suspend fun updateMaterialDidatico(@Path("id") id: Int, @Body material: MaterialDidatico): MaterialDidatico

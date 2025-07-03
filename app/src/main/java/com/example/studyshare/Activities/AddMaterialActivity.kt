@@ -36,9 +36,6 @@ class AddMaterialActivity : AppCompatActivity() {
         CategoriaViewModelFactory(categoriaRepository)
     }
 
-    private var autorId: Int? = null
-
-    // Guardar categorias carregadas
     private var listaCategorias: List<Categoria> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,9 +43,8 @@ class AddMaterialActivity : AppCompatActivity() {
         binding = ActivityAddMaterialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        autorId = intent.getIntExtra("userId", -1).takeIf { it != -1 }
+        val autorId = intent.getIntExtra("userId", -1).takeIf { it != -1 }
 
-        // Observa sucesso
         lifecycleScope.launch {
             materialViewModel.materialCriado.collectLatest { sucesso ->
                 if (sucesso == true) {
@@ -65,7 +61,7 @@ class AddMaterialActivity : AppCompatActivity() {
             materialViewModel.erroMensagem.collectLatest { erro ->
                 erro?.let {
                     Toast.makeText(this@AddMaterialActivity, "Erro: $it", Toast.LENGTH_LONG).show()
-                    Log.e("AddCategoriaActivity", "Erro ao criar categoria", Throwable(it))
+                    Log.e("AddMaterialActivity", "Erro ao criar material", Throwable(it))
                 }
             }
         }
