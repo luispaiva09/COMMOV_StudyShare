@@ -1,4 +1,4 @@
-package com.example.studyshare
+package com.example.studyshare.Activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.DataClasses.Utilizador
 import com.example.studyshare.Repositories.UtilizadorRepository
+import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModels.UtilizadorViewModel
 import com.example.studyshare.databinding.ActivityRegisterBinding

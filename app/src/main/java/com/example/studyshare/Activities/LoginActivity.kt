@@ -1,4 +1,4 @@
-package com.example.studyshare
+package com.example.studyshare.Activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.Repositories.UtilizadorRepository
+import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModels.UtilizadorViewModel
 import com.example.studyshare.databinding.ActivityLoginBinding
@@ -48,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@LoginActivity, InicioActivity::class.java)
                     intent.putExtra("username", utilizador.username)
+                    intent.putExtra("username", utilizador.id)
                     startActivity(intent)
                     finish()
                 }
