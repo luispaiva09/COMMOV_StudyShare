@@ -39,29 +39,29 @@ class InicioActivity : AppCompatActivity() {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
         val buttonMenu = findViewById<ImageButton>(R.id.buttonMenu)
-        //val buttonProfile = findViewById<ImageButton>(R.id.buttonProfile)
+        val buttonProfile = findViewById<ImageButton>(R.id.buttonPerfil)
 
         buttonMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.END)
         }
 
-        //buttonProfile.setOnClickListener {
-        //    // Vai para a página de perfil
-       // }
+        buttonProfile.setOnClickListener {
+            val intent = Intent(this, PerfilActivity::class.java)
+            startActivity(intent)
+        }
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
-
+                    val editor = sharedPref.edit()
+                    editor.clear()
+                    editor.apply()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                     true
                 }
-                else -> {
-
-                    true
-                }
+                else -> true
             }
         }
-
     }
-
 }

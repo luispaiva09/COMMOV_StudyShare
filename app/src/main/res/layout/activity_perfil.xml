@@ -5,13 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Conteúdo Principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Cabeçalho -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +46,6 @@
                 android:contentDescription="Menu" />
         </LinearLayout>
 
-        <!-- Conteúdo Scrollável -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,7 +57,6 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
 
-                <!-- Ícone de Perfil -->
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -77,7 +73,6 @@
                     android:textSize="18sp"
                     android:layout_marginTop="8dp" />
 
-                <!-- Informação Pessoal -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,7 +83,6 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Detalhes da Conta -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,6 +92,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextNumero"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número de Utilizador"
@@ -106,6 +101,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nome de Utilizador"
@@ -114,6 +110,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nome Real"
@@ -122,6 +119,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextTelefone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número de Telefone"
@@ -130,17 +128,10 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
-                    android:enabled="false"
-                    android:background="@android:drawable/edit_text"
-                    android:layout_marginBottom="8dp" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Data de Nascimento"
                     android:enabled="false"
                     android:background="@android:drawable/edit_text"
                     android:layout_marginBottom="16dp" />
@@ -153,7 +144,6 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="24dp" />
 
-                <!-- Login Info -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -163,6 +153,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <EditText
+                    android:id="@+id/editTextPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Palavra-passe"
@@ -182,7 +173,6 @@
         </ScrollView>
     </LinearLayout>
 
-    <!-- Menu Lateral Direito -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationViewPerfil"
         android:layout_width="wrap_content"

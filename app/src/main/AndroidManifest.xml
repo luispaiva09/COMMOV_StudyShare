@@ -40,6 +40,10 @@
             android:name=".Activities.AddCategoriaActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.PerfilActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
