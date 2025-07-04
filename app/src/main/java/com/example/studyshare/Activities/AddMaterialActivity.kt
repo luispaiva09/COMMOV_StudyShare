@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.DataClasses.Categoria
 import com.example.studyshare.DataClasses.MaterialDidatico
@@ -21,7 +20,7 @@ import com.example.studyshare.databinding.ActivityAddMaterialBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class AddMaterialActivity : AppCompatActivity() {
+class AddMaterialActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddMaterialBinding
 
@@ -42,6 +41,9 @@ class AddMaterialActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddMaterialBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setup do header usando a root da view do header
+        setupHeader(binding.headerLayout.root, null)
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val autorId = sharedPref.getInt("userId", -1)
