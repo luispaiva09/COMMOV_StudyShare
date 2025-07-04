@@ -42,7 +42,8 @@
 
         <activity
             android:name=".Activities.PerfilActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:enableOnBackInvokedCallback="true"/>
 
     </application>
 

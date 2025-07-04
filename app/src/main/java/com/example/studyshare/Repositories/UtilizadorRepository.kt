@@ -26,13 +26,22 @@ class UtilizadorRepository(private val api: ApiService) {
         return if (response.isNotEmpty()) response[0] else null
     }
 
-    suspend fun getUtilizadorById(id: Int): Utilizador {
-        return api.getUtilizadorById(id)
+    suspend fun getUtilizadores(): List<Utilizador> {
+        return api.getUtilizadores()
     }
 
-    suspend fun updateUtilizador(id: Int, utilizador: Utilizador): Utilizador {
-        return api.updateUtilizador(id, utilizador)
+    suspend fun getUtilizadorById(id: Int): Utilizador? {
+        val lista = api.getUtilizadorById("eq.$id")
+        return lista.firstOrNull()
     }
 
+    suspend fun updateUtilizador(id: Int, utilizador: Utilizador): Utilizador? {
+        val lista = api.updateUtilizador("eq.$id", utilizador)
+        return lista.firstOrNull()
+    }
+
+    suspend fun deleteUtilizador(id: Int): Response<Unit> {
+        return api.deleteUtilizador("eq.$id")
+    }
 
 }

@@ -18,7 +18,6 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class LoginRequest(
@@ -39,17 +38,17 @@ interface ApiService {
     @GET("utilizadores")
     suspend fun getUtilizadores(): List<Utilizador>
 
-    @GET("utilizadores/{id}")
-    suspend fun getUtilizadorById(@Path("id") id: Int): Utilizador
+    @GET("utilizadores")
+    suspend fun getUtilizadorById(@Query("id") id: String): List<Utilizador>
 
     @POST("utilizadores")
     suspend fun createUtilizador(@Body utilizador: Utilizador): Response<Unit>
 
-    @PUT("utilizadores/{id}")
-    suspend fun updateUtilizador(@Path("id") id: Int, @Body utilizador: Utilizador): Utilizador
+    @PUT("utilizadores")
+    suspend fun updateUtilizador(@Query("id") id: String, @Body utilizador: Utilizador): List<Utilizador>
 
-    @DELETE("utilizadores/{id}")
-    suspend fun deleteUtilizador(@Path("id") id: Int)
+    @DELETE("utilizadores")
+    suspend fun deleteUtilizador(@Query("id") id: String): Response<Unit>
 
     @GET("utilizadores")
     suspend fun verificarUsernameExistente(
@@ -73,18 +72,18 @@ interface ApiService {
     @GET("materiaisdidaticos")
     suspend fun getMateriaisDidaticos(): List<MaterialDidatico>
 
-    @GET("materiaisdidaticos/{id}")
-    suspend fun getMaterialDidaticoById(@Path("id") id: Int): MaterialDidatico
+    @GET("materiaisdidaticos")
+    suspend fun getMaterialDidaticoById(@Query("id") id: String): List<MaterialDidatico>
 
     @Headers("Prefer: return=representation")
     @POST("materiaisdidaticos")
     suspend fun createMaterialDidatico(@Body material: MaterialDidatico): List<MaterialDidatico>
 
-    @PUT("materiaisdidaticos/{id}")
-    suspend fun updateMaterialDidatico(@Path("id") id: Int, @Body material: MaterialDidatico): MaterialDidatico
+    @PUT("materiaisdidaticos")
+    suspend fun updateMaterialDidatico(@Query("id") id: String, @Body material: MaterialDidatico): List<MaterialDidatico>
 
-    @DELETE("materiaisdidaticos/{id}")
-    suspend fun deleteMaterialDidatico(@Path("id") id: Int)
+    @DELETE("materiaisdidaticos")
+    suspend fun deleteMaterialDidatico(@Query("id") id: String): Response<Unit>
 
 
     // CATEGORIAS
@@ -92,18 +91,18 @@ interface ApiService {
     @GET("categorias")
     suspend fun getCategorias(): List<Categoria>
 
-    @GET("categorias/{id}")
-    suspend fun getCategoriaById(@Path("id") id: Int): Categoria
+    @GET("categorias")
+    suspend fun getCategoriaById(@Query("id") id: String): List<Categoria>
 
     @Headers("Prefer: return=representation")
     @POST("categorias")
     suspend fun createCategoria(@Body categoria: Categoria): List<Categoria>
 
-    @PUT("categorias/{id}")
-    suspend fun updateCategoria(@Path("id") id: Int, @Body categoria: Categoria): Categoria
+    @PUT("categorias")
+    suspend fun updateCategoria(@Query("id") id: String, @Body categoria: Categoria): List<Categoria>
 
-    @DELETE("categorias/{id}")
-    suspend fun deleteCategoria(@Path("id") id: Int)
+    @DELETE("categorias")
+    suspend fun deleteCategoria(@Query("id") id: String): Response<Unit>
 
 
     // AVALIACOES
@@ -111,17 +110,18 @@ interface ApiService {
     @GET("avaliacoes")
     suspend fun getAvaliacoes(): List<Avaliacao>
 
-    @GET("avaliacoes/{id}")
-    suspend fun getAvaliacaoById(@Path("id") id: Int): Avaliacao
+    @GET("avaliacoes")
+    suspend fun getAvaliacaoById(@Query("id") id: String): List<Avaliacao>
 
+    @Headers("Prefer: return=representation")
     @POST("avaliacoes")
-    suspend fun createAvaliacao(@Body avaliacao: Avaliacao): Avaliacao
+    suspend fun createAvaliacao(@Body avaliacao: Avaliacao): List<Avaliacao>
 
-    @PUT("avaliacoes/{id}")
-    suspend fun updateAvaliacao(@Path("id") id: Int, @Body avaliacao: Avaliacao): Avaliacao
+    @PUT("avaliacoes")
+    suspend fun updateAvaliacao(@Query("id") id: String, @Body avaliacao: Avaliacao): List<Avaliacao>
 
-    @DELETE("avaliacoes/{id}")
-    suspend fun deleteAvaliacao(@Path("id") id: Int)
+    @DELETE("avaliacoes")
+    suspend fun deleteAvaliacao(@Query("id") id: String): Response<Unit>
 
 
     // COMENTARIOS
@@ -129,17 +129,17 @@ interface ApiService {
     @GET("comentarios")
     suspend fun getComentarios(): List<Comentario>
 
-    @GET("comentarios/{id}")
-    suspend fun getComentarioById(@Path("id") id: Int): Comentario
+    @GET("comentarios")
+    suspend fun getComentarioById(@Query("id") id: String): List<Comentario>
 
     @POST("comentarios")
-    suspend fun createComentario(@Body comentario: Comentario): Comentario
+    suspend fun createComentario(@Body comentario: Comentario): List<Comentario>
 
-    @PUT("comentarios/{id}")
-    suspend fun updateComentario(@Path("id") id: Int, @Body comentario: Comentario): Comentario
+    @PUT("comentarios")
+    suspend fun updateComentario(@Query("id") id: String, @Body comentario: Comentario): List<Comentario>
 
-    @DELETE("comentarios/{id}")
-    suspend fun deleteComentario(@Path("id") id: Int)
+    @DELETE("comentarios")
+    suspend fun deleteComentario(@Query("id") id: String): Response<Unit>
 
 
     // SYNC OFFLINE
@@ -147,14 +147,14 @@ interface ApiService {
     @GET("syncoffline")
     suspend fun getSyncsOffline(): List<SyncOffline>
 
-    @GET("syncoffline/{id}")
-    suspend fun getSyncOfflineById(@Path("id") id: Int): SyncOffline
+    @GET("syncoffline")
+    suspend fun getSyncOfflineById(@Query("id") id: String): List<SyncOffline>
 
     @POST("syncoffline")
-    suspend fun createSyncOffline(@Body syncOffline: SyncOffline): SyncOffline
+    suspend fun createSyncOffline(@Body syncOffline: SyncOffline): List<SyncOffline>
 
-    @DELETE("syncoffline/{id}")
-    suspend fun deleteSyncOffline(@Path("id") id: Int)
+    @DELETE("syncoffline")
+    suspend fun deleteSyncOffline(@Query("id") id: String): Response<Unit>
 
 
     // ESTATISTICAS
@@ -162,14 +162,14 @@ interface ApiService {
     @GET("estatisticas")
     suspend fun getEstatisticas(): List<Estatistica>
 
-    @GET("estatisticas/{id}")
-    suspend fun getEstatisticaById(@Path("id") id: Int): Estatistica
+    @GET("estatisticas")
+    suspend fun getEstatisticaById(@Query("id") id: String): List<Estatistica>
 
     @POST("estatisticas")
-    suspend fun createEstatistica(@Body estatistica: Estatistica): Estatistica
+    suspend fun createEstatistica(@Body estatistica: Estatistica): List<Estatistica>
 
-    @DELETE("estatisticas/{id}")
-    suspend fun deleteEstatistica(@Path("id") id: Int)
+    @DELETE("estatisticas")
+    suspend fun deleteEstatistica(@Query("id") id: String): Response<Unit>
 
 
     // SESSOES ESTUDO
@@ -177,17 +177,17 @@ interface ApiService {
     @GET("sessoesestudo")
     suspend fun getSessoesEstudo(): List<SessaoEstudo>
 
-    @GET("sessoesestudo/{id}")
-    suspend fun getSessaoEstudoById(@Path("id") id: Int): SessaoEstudo
+    @GET("sessoesestudo")
+    suspend fun getSessaoEstudoById(@Query("id") id: String): List<SessaoEstudo>
 
     @POST("sessoesestudo")
-    suspend fun createSessaoEstudo(@Body sessaoEstudo: SessaoEstudo): SessaoEstudo
+    suspend fun createSessaoEstudo(@Body sessaoEstudo: SessaoEstudo): List<SessaoEstudo>
 
-    @PUT("sessoesestudo/{id}")
-    suspend fun updateSessaoEstudo(@Path("id") id: Int, @Body sessaoEstudo: SessaoEstudo): SessaoEstudo
+    @PUT("sessoesestudo")
+    suspend fun updateSessaoEstudo(@Query("id") id: String, @Body sessaoEstudo: SessaoEstudo): List<SessaoEstudo>
 
-    @DELETE("sessoesestudo/{id}")
-    suspend fun deleteSessaoEstudo(@Path("id") id: Int)
+    @DELETE("sessoesestudo")
+    suspend fun deleteSessaoEstudo(@Query("id") id: String): Response<Unit>
 
 
     // PARTICIPANTES SESSAO
@@ -195,14 +195,14 @@ interface ApiService {
     @GET("participantessessao")
     suspend fun getParticipantesSessao(): List<ParticipanteSessao>
 
-    @GET("participantessessao/{id}")
-    suspend fun getParticipanteSessaoById(@Path("id") id: Int): ParticipanteSessao
+    @GET("participantessessao")
+    suspend fun getParticipanteSessaoById(@Query("id") id: String): List<ParticipanteSessao>
 
     @POST("participantessessao")
-    suspend fun createParticipanteSessao(@Body participanteSessao: ParticipanteSessao): ParticipanteSessao
+    suspend fun createParticipanteSessao(@Body participanteSessao: ParticipanteSessao): List<ParticipanteSessao>
 
-    @DELETE("participantessessao/{id}")
-    suspend fun deleteParticipanteSessao(@Path("id") id: Int)
+    @DELETE("participantessessao")
+    suspend fun deleteParticipanteSessao(@Query("id") id: String): Response<Unit>
 
 
     // DISCUSSOES
@@ -210,17 +210,17 @@ interface ApiService {
     @GET("discussoes")
     suspend fun getDiscussoes(): List<Discussao>
 
-    @GET("discussoes/{id}")
-    suspend fun getDiscussaoById(@Path("id") id: Int): Discussao
+    @GET("discussoes")
+    suspend fun getDiscussaoById(@Query("id") id: String): List<Discussao>
 
     @POST("discussoes")
-    suspend fun createDiscussao(@Body discussao: Discussao): Discussao
+    suspend fun createDiscussao(@Body discussao: Discussao): List<Discussao>
 
-    @PUT("discussoes/{id}")
-    suspend fun updateDiscussao(@Path("id") id: Int, @Body discussao: Discussao): Discussao
+    @PUT("discussoes")
+    suspend fun updateDiscussao(@Query("id") id: String, @Body discussao: Discussao): List<Discussao>
 
-    @DELETE("discussoes/{id}")
-    suspend fun deleteDiscussao(@Path("id") id: Int)
+    @DELETE("discussoes")
+    suspend fun deleteDiscussao(@Query("id") id: String): Response<Unit>
 
 
     // MENSAGENS DISCUSSAO
@@ -228,15 +228,15 @@ interface ApiService {
     @GET("mensagensdiscussao")
     suspend fun getMensagensDiscussao(): List<MensagemDiscussao>
 
-    @GET("mensagensdiscussao/{id}")
-    suspend fun getMensagemDiscussaoById(@Path("id") id: Int): MensagemDiscussao
+    @GET("mensagensdiscussao")
+    suspend fun getMensagemDiscussaoById(@Query("id") id: String): List<MensagemDiscussao>
 
     @POST("mensagensdiscussao")
-    suspend fun createMensagemDiscussao(@Body mensagemDiscussao: MensagemDiscussao): MensagemDiscussao
+    suspend fun createMensagemDiscussao(@Body mensagemDiscussao: MensagemDiscussao): List<MensagemDiscussao>
 
-    @PUT("mensagensdiscussao/{id}")
-    suspend fun updateMensagemDiscussao(@Path("id") id: Int, @Body mensagemDiscussao: MensagemDiscussao): MensagemDiscussao
+    @PUT("mensagensdiscussao")
+    suspend fun updateMensagemDiscussao(@Query("id") id: String, @Body mensagemDiscussao: MensagemDiscussao): List<MensagemDiscussao>
 
-    @DELETE("mensagensdiscussao/{id}")
-    suspend fun deleteMensagemDiscussao(@Path("id") id: Int)
+    @DELETE("mensagensdiscussao")
+    suspend fun deleteMensagemDiscussao(@Query("id") id: String): Response<Unit>
 }

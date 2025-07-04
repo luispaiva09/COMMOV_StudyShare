@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.Discussao
+import retrofit2.Response
 
 class DiscussaoRepository(private val api: ApiService) {
 
@@ -9,19 +10,21 @@ class DiscussaoRepository(private val api: ApiService) {
         return api.getDiscussoes()
     }
 
-    suspend fun getDiscussaoById(id: Int): Discussao {
-        return api.getDiscussaoById(id)
+    suspend fun getDiscussaoById(id: Int): Discussao? {
+        val lista = api.getDiscussaoById("eq.$id")
+        return lista.firstOrNull()
     }
 
-    suspend fun criarDiscussao(discussao: Discussao): Discussao {
+    suspend fun criarDiscussao(discussao: Discussao): List<Discussao> {
         return api.createDiscussao(discussao)
     }
 
-    suspend fun atualizarDiscussao(id: Int, discussao: Discussao): Discussao {
-        return api.updateDiscussao(id, discussao)
+    suspend fun atualizarDiscussao(id: Int, discussao: Discussao): Discussao? {
+        val lista = api.updateDiscussao("eq.$id", discussao)
+        return lista.firstOrNull()
     }
 
-    suspend fun apagarDiscussao(id: Int) {
-        api.deleteDiscussao(id)
+    suspend fun apagarDiscussao(id: Int): Response<Unit> {
+        return api.deleteDiscussao("eq.$id")
     }
 }
