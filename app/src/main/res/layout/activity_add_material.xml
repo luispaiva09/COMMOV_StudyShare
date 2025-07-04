@@ -25,6 +25,13 @@
             android:inputType="textMultiLine" />
 
         <EditText
+            android:id="@+id/etImagemCapa"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="URL da Imagem Capa"
+            android:inputType="textUri" />
+
+        <EditText
             android:id="@+id/etTipo"
             android:layout_width="match_parent"
             android:layout_height="48dp"

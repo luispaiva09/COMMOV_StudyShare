@@ -84,6 +84,7 @@ class AddMaterialActivity : AppCompatActivity() {
         binding.buttonSubmeter.setOnClickListener {
             val titulo = binding.etTitulo.text.toString().trim()
             val descricao = binding.etDescricao.text.toString().trim().ifEmpty { null }
+            val imagemCapaUrl = binding.etImagemCapa.text.toString().trim().ifEmpty { null }
             val tipo = binding.etTipo.text.toString().trim()
             val ficheiroUrl = binding.etFicheiroUrl.text.toString().trim()
             val privado = binding.checkBoxPrivado.isChecked
@@ -102,6 +103,7 @@ class AddMaterialActivity : AppCompatActivity() {
             val novoMaterial = MaterialDidatico(
                 titulo = titulo,
                 descricao = descricao,
+                imagem_capa_url = imagemCapaUrl,
                 tipo = tipo,
                 categoria_id = categoriaSelecionada.id,
                 autor_id = autorId,
@@ -116,6 +118,7 @@ class AddMaterialActivity : AppCompatActivity() {
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
+        binding.etImagemCapa.text?.clear()
         binding.etTipo.text?.clear()
         binding.etFicheiroUrl.text?.clear()
         binding.checkBoxPrivado.isChecked = false
