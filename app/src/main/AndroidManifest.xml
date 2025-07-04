@@ -41,6 +41,10 @@
             android:exported="true" />
 
         <activity
+            android:name=".Activities.BaseActivity"
+            android:exported="true" />
+
+        <activity
             android:name=".Activities.PerfilActivity"
             android:exported="true"
             android:enableOnBackInvokedCallback="true"/>

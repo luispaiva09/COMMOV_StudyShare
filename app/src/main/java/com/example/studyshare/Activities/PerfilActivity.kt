@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.R
@@ -15,7 +14,7 @@ import com.example.studyshare.ViewModels.UtilizadorViewModel
 import com.example.studyshare.databinding.ActivityPerfilBinding
 import kotlinx.coroutines.launch
 
-class PerfilActivity : AppCompatActivity() {
+class PerfilActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPerfilBinding
 
@@ -27,6 +26,12 @@ class PerfilActivity : AppCompatActivity() {
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configura o cabeçalho da base
+        setupHeader(
+            drawerLayout = binding.drawerLayoutPerfil,
+            headerLayout = binding.headerLayoutPerfil
+        )
+
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val userId = sharedPref.getInt("userId", -1)
 
@@ -34,7 +39,7 @@ class PerfilActivity : AppCompatActivity() {
             viewModel.getUtilizadorById(userId)
         }
 
-        // Observar o utilizadorPerfil (StateFlow)
+        // Observa os dados do utilizador
         lifecycleScope.launch {
             viewModel.utilizadorPerfil.collect { utilizador ->
                 utilizador?.let {
@@ -50,7 +55,6 @@ class PerfilActivity : AppCompatActivity() {
             }
         }
 
-
         lifecycleScope.launch {
             viewModel.erroMensagem.collect { erro ->
                 erro?.let {
@@ -59,14 +63,7 @@ class PerfilActivity : AppCompatActivity() {
             }
         }
 
-        binding.buttonMenu.setOnClickListener {
-            binding.drawerLayoutPerfil.openDrawer(GravityCompat.END)
-        }
-
-        binding.buttonPerfil.setOnClickListener {
-            binding.drawerLayoutPerfil.closeDrawer(GravityCompat.END)
-        }
-
+        // Configura o Navigation Drawer
         binding.navigationViewPerfil.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
@@ -85,5 +82,4 @@ class PerfilActivity : AppCompatActivity() {
             }
         }
     }
-
 }

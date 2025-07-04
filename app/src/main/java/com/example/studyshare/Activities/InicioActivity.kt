@@ -10,7 +10,7 @@ import com.example.studyshare.R
 import com.example.studyshare.databinding.ActivityInicioBinding
 import com.google.android.material.navigation.NavigationView
 
-class InicioActivity : AppCompatActivity() {
+class InicioActivity : BaseActivity() {
 
     private lateinit var binding: ActivityInicioBinding
 

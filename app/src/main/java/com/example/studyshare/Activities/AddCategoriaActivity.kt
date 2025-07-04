@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.DataClasses.Categoria
 import com.example.studyshare.Repositories.CategoriaRepository
@@ -16,7 +15,7 @@ import com.example.studyshare.databinding.ActivityAddCategoriaBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class AddCategoriaActivity : AppCompatActivity() {
+class AddCategoriaActivity : BaseActivity() {
 
     private lateinit var binding: ActivityAddCategoriaBinding
 
@@ -27,6 +26,8 @@ class AddCategoriaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddCategoriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupHeader(binding.headerLayout.root, null)
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val userId = sharedPref.getInt("userId", -1)
