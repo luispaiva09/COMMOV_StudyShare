@@ -1,10 +1,10 @@
 package com.example.studyshare.ViewModels
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studyshare.DataClasses.Utilizador
 import com.example.studyshare.LoginResponse
 import com.example.studyshare.Repositories.UtilizadorRepository
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +19,12 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
 
     private val _utilizadorLogado = MutableStateFlow<LoginResponse?>(null)
     val utilizadorLogado: StateFlow<LoginResponse?> = _utilizadorLogado
+
+    private val _utilizadorPerfil = MutableStateFlow<Utilizador?>(null)
+    val utilizadorPerfil: StateFlow<Utilizador?> = _utilizadorPerfil
+
+    private val _updateSucesso = MutableStateFlow<Boolean?>(null)
+    val updateSucesso: StateFlow<Boolean?> = _updateSucesso
 
     fun registarUtilizador(utilizador: Utilizador) {
         viewModelScope.launch {
@@ -73,8 +79,36 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
+    fun getUtilizadorById(id: Int) {
+        viewModelScope.launch {
+            try {
+                val utilizador = repository.getUtilizadorById(id)
+                _utilizadorPerfil.value = utilizador
+                _erroMensagem.value = null
+            } catch (e: Exception) {
+                _utilizadorPerfil.value = null
+                _erroMensagem.value = e.message ?: "Erro ao carregar utilizador."
+            }
+        }
+    }
+
+    fun updateUtilizador(id: Int, utilizador: Utilizador) {
+        viewModelScope.launch {
+            try {
+                val updatedUser = repository.updateUtilizador(id, utilizador)
+                _utilizadorPerfil.value = updatedUser
+                _updateSucesso.value = true
+                _erroMensagem.value = null
+            } catch (e: Exception) {
+                _updateSucesso.value = false
+                _erroMensagem.value = e.message ?: "Erro ao atualizar utilizador."
+            }
+        }
+    }
+
     fun resetEstado() {
         _registoSucesso.value = null
+        _updateSucesso.value = null
         _erroMensagem.value = null
     }
 }

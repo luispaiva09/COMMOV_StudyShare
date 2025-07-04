@@ -28,6 +28,9 @@ class AddCategoriaActivity : AppCompatActivity() {
         binding = ActivityAddCategoriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val userId = sharedPref.getInt("userId", -1)
+
         lifecycleScope.launch {
             viewModel.categoriaCriada.collectLatest { sucesso ->
                 sucesso?.let {

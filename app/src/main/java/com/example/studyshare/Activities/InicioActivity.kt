@@ -2,8 +2,13 @@ package com.example.studyshare.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.studyshare.R
 import com.example.studyshare.databinding.ActivityInicioBinding
+import com.google.android.material.navigation.NavigationView
 
 class InicioActivity : AppCompatActivity() {
 
@@ -14,10 +19,11 @@ class InicioActivity : AppCompatActivity() {
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val username = intent.getStringExtra("username") ?: "Utilizador"
-        binding.textViewWelcome.text = "Bem-vindo, $username!"
+        val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val userId = sharedPref.getInt("userId", -1)
+        val username = sharedPref.getString("username", null)
 
-        val userId = intent.getIntExtra("userId", -1)
+        binding.textViewWelcome.text = "Bem-vindo, $username!"
 
         binding.buttonContinuar.setOnClickListener {
             val intent = Intent(this, AddMaterialActivity::class.java)
@@ -28,6 +34,32 @@ class InicioActivity : AppCompatActivity() {
         binding.buttonCategoria.setOnClickListener {
             val intent = Intent(this, AddCategoriaActivity::class.java)
             startActivity(intent)
+        }
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+        val navigationView = findViewById<NavigationView>(R.id.navigationView)
+        val buttonMenu = findViewById<ImageButton>(R.id.buttonMenu)
+        //val buttonProfile = findViewById<ImageButton>(R.id.buttonProfile)
+
+        buttonMenu.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
+
+        //buttonProfile.setOnClickListener {
+        //    // Vai para a página de perfil
+       // }
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+
+                    true
+                }
+                else -> {
+
+                    true
+                }
+            }
         }
 
     }

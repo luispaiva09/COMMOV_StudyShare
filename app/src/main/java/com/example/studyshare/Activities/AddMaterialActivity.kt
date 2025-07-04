@@ -43,7 +43,8 @@ class AddMaterialActivity : AppCompatActivity() {
         binding = ActivityAddMaterialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val autorId = intent.getIntExtra("userId", -1).takeIf { it != -1 }
+        val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+        val autorId = sharedPref.getInt("userId", -1)
 
         lifecycleScope.launch {
             materialViewModel.materialCriado.collectLatest { sucesso ->

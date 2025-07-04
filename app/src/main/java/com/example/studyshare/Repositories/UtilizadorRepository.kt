@@ -26,4 +26,13 @@ class UtilizadorRepository(private val api: ApiService) {
         return if (response.isNotEmpty()) response[0] else null
     }
 
+    suspend fun getUtilizadorById(id: Int): Utilizador {
+        return api.getUtilizadorById(id)
+    }
+
+    suspend fun updateUtilizador(id: Int, utilizador: Utilizador): Utilizador {
+        return api.updateUtilizador(id, utilizador)
+    }
+
+
 }

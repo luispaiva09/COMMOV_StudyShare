@@ -47,9 +47,13 @@ class LoginActivity : AppCompatActivity() {
             viewModel.utilizadorLogado.collectLatest { utilizador ->
                 if (utilizador != null) {
                     Toast.makeText(this@LoginActivity, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
+                    val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        putInt("userId", utilizador.id)
+                        putString("username", utilizador.username)
+                        apply()
+                    }
                     val intent = Intent(this@LoginActivity, InicioActivity::class.java)
-                    intent.putExtra("username", utilizador.username)
-                    intent.putExtra("userId", utilizador.id)
                     startActivity(intent)
                     finish()
                 }
