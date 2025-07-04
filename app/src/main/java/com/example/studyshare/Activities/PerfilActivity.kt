@@ -7,24 +7,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.studyshare.ApiService
 import com.example.studyshare.R
 import com.example.studyshare.Repositories.UtilizadorRepository
+import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModels.UtilizadorViewModel
 import com.example.studyshare.databinding.ActivityPerfilBinding
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class PerfilActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPerfilBinding
 
-    private val viewModel: UtilizadorViewModel by viewModels {
-        UtilizadorViewModelFactory(UtilizadorRepository(getApiService()))
-    }
+    private val repository = UtilizadorRepository(RetrofitClient.api)
+    private val viewModel: UtilizadorViewModel by viewModels { UtilizadorViewModelFactory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,12 +86,4 @@ class PerfilActivity : AppCompatActivity() {
         }
     }
 
-    private fun getApiService(): ApiService {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://o-teu-backend-url.supabase.co/rest/v1/")  // substitui pela tua URL real
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return retrofit.create(ApiService::class.java)
-    }
 }

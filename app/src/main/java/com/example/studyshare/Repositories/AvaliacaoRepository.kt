@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.Avaliacao
+import retrofit2.Response
 
 class AvaliacaoRepository(private val api: ApiService) {
 
@@ -9,19 +10,21 @@ class AvaliacaoRepository(private val api: ApiService) {
         return api.getAvaliacoes()
     }
 
-    suspend fun getAvaliacaoById(id: Int): Avaliacao {
-        return api.getAvaliacaoById(id)
+    suspend fun getAvaliacaoById(id: Int): Avaliacao? {
+        val lista = api.getAvaliacaoById("eq.$id")
+        return lista.firstOrNull()
     }
 
-    suspend fun criarAvaliacao(avaliacao: Avaliacao): Avaliacao {
+    suspend fun criarAvaliacao(avaliacao: Avaliacao): List<Avaliacao> {
         return api.createAvaliacao(avaliacao)
     }
 
-    suspend fun atualizarAvaliacao(id: Int, avaliacao: Avaliacao): Avaliacao {
-        return api.updateAvaliacao(id, avaliacao)
+    suspend fun atualizarAvaliacao(id: Int, avaliacao: Avaliacao): Avaliacao? {
+        val lista = api.updateAvaliacao("eq.$id", avaliacao)
+        return lista.firstOrNull()
     }
 
-    suspend fun apagarAvaliacao(id: Int) {
-        api.deleteAvaliacao(id)
+    suspend fun apagarAvaliacao(id: Int): Response<Unit> {
+        return api.deleteAvaliacao("eq.$id")
     }
 }

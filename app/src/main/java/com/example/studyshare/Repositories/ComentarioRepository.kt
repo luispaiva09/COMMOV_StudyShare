@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.Comentario
+import retrofit2.Response
 
 class ComentarioRepository(private val api: ApiService) {
 
@@ -9,19 +10,21 @@ class ComentarioRepository(private val api: ApiService) {
         return api.getComentarios()
     }
 
-    suspend fun getComentarioById(id: Int): Comentario {
-        return api.getComentarioById(id)
+    suspend fun getComentarioById(id: Int): Comentario? {
+        val lista = api.getComentarioById("eq.$id")
+        return lista.firstOrNull()
     }
 
-    suspend fun criarComentario(comentario: Comentario): Comentario {
+    suspend fun criarComentario(comentario: Comentario): List<Comentario> {
         return api.createComentario(comentario)
     }
 
-    suspend fun atualizarComentario(id: Int, comentario: Comentario): Comentario {
-        return api.updateComentario(id, comentario)
+    suspend fun atualizarComentario(id: Int, comentario: Comentario): Comentario? {
+        val lista = api.updateComentario("eq.$id", comentario)
+        return lista.firstOrNull()
     }
 
-    suspend fun apagarComentario(id: Int) {
-        api.deleteComentario(id)
+    suspend fun apagarComentario(id: Int): Response<Unit> {
+        return api.deleteComentario("eq.$id")
     }
 }

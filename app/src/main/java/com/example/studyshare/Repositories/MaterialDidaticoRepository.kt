@@ -2,6 +2,7 @@ package com.example.studyshare.Repositories
 
 import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.MaterialDidatico
+import retrofit2.Response
 
 class MaterialDidaticoRepository(private val api: ApiService) {
 
@@ -9,19 +10,21 @@ class MaterialDidaticoRepository(private val api: ApiService) {
         return api.getMateriaisDidaticos()
     }
 
-    suspend fun getMaterialById(id: Int): MaterialDidatico {
-        return api.getMaterialDidaticoById(id)
+    suspend fun getMaterialById(id: Int): MaterialDidatico? {
+        val lista = api.getMaterialDidaticoById("eq.$id")
+        return lista.firstOrNull()
     }
 
     suspend fun criarMaterial(material: MaterialDidatico): List<MaterialDidatico> {
         return api.createMaterialDidatico(material)
     }
 
-    suspend fun atualizarMaterial(id: Int, material: MaterialDidatico): MaterialDidatico {
-        return api.updateMaterialDidatico(id, material)
+    suspend fun atualizarMaterial(id: Int, material: MaterialDidatico): MaterialDidatico? {
+        val lista = api.updateMaterialDidatico("eq.$id", material)
+        return lista.firstOrNull()
     }
 
-    suspend fun apagarMaterial(id: Int) {
-        api.deleteMaterialDidatico(id)
+    suspend fun apagarMaterial(id: Int): Response<Unit> {
+        return api.deleteMaterialDidatico("eq.$id")
     }
 }
