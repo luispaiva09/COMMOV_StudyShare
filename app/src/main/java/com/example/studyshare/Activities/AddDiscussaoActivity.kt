@@ -159,8 +159,8 @@ class AddDiscussaoActivity : BaseActivity() {
 
             val request = Request.Builder()
                 .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-discussao/$fileName")
-                .addHeader("apikey", "YOUR_API_KEY")
-                .addHeader("Authorization", "Bearer YOUR_BEARER_TOKEN")
+                .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
                 .addHeader("Content-Type", "image/jpeg")
                 .put(bytes.toRequestBody("image/jpeg".toMediaType()))
                 .build()
@@ -169,7 +169,6 @@ class AddDiscussaoActivity : BaseActivity() {
             val response = client.newCall(request).execute()
 
             if (response.isSuccessful) {
-                // URL pública para acesso à imagem (com /public/ na URL)
                 val imageUrl = "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-discussao/$fileName"
                 Log.d("UPLOAD_SUPABASE", "Imagem enviada com sucesso: $imageUrl")
                 imageUrl
