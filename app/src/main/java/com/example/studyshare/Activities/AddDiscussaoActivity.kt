@@ -14,8 +14,10 @@ import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.DiscussaoViewModelFactory
 import com.example.studyshare.ViewModels.DiscussaoViewModel
 import com.example.studyshare.databinding.ActivityAddDiscussaoBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -111,7 +113,10 @@ class AddDiscussaoActivity : BaseActivity() {
                 var imagemDiscussaoUrl: String? = null
 
                 if (imageUri != null) {
-                    imagemDiscussaoUrl = uploadImagemParaSupabase(imageUri!!)
+                    imagemDiscussaoUrl = withContext(Dispatchers.IO) {
+                        uploadImagemParaSupabase(imageUri!!)
+                    }
+                    Log.d("UPLOAD_SUPABASE", "URL da imagem após upload: $imagemDiscussaoUrl")
                 }
 
                 val novaDiscussao = Discussao(
@@ -120,6 +125,8 @@ class AddDiscussaoActivity : BaseActivity() {
                     imagem_discussao_url = imagemDiscussaoUrl,
                     criador_id = criadorId
                 )
+
+                Log.d("DEBUG_NOVA_DISCUSSAO", "Discussão a enviar: $novaDiscussao")
 
                 discussaoViewModel.criarDiscussao(novaDiscussao)
             }
@@ -134,37 +141,45 @@ class AddDiscussaoActivity : BaseActivity() {
         }
     }
 
-    private suspend fun uploadImagemParaSupabase(uri: Uri): String? {
-        val contentResolver = contentResolver
-        val inputStream = contentResolver.openInputStream(uri) ?: return null
-        val bytes = inputStream.readBytes()
-        inputStream.close()
-
-        val fileName = "discussao_${System.currentTimeMillis()}.jpg"
-
-        val request = Request.Builder()
-            .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-discussao/$fileName")
-            .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
-            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
-            .addHeader("Content-Type", "image/jpeg")
-            .put(bytes.toRequestBody("image/jpeg".toMediaType()))
-            .build()
-
-        val client = OkHttpClient()
-        val response = client.newCall(request).execute()
-
-        return if (response.isSuccessful) {
-            "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-discussao/$fileName"
-        } else {
-            Log.e("UploadImagem", "Erro: ${response.code}: ${response.message}")
-            null
-        }
-    }
-
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
         imageUri = null
         discussaoViewModel.resetErro()
+    }
+
+    private fun uploadImagemParaSupabase(uri: Uri): String? {
+        return try {
+            val contentResolver = contentResolver
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val bytes = inputStream.readBytes()
+            inputStream.close()
+
+            val fileName = "discussao_${System.currentTimeMillis()}.jpg"
+
+            val request = Request.Builder()
+                .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-discussao/$fileName")
+                .addHeader("apikey", "YOUR_API_KEY")
+                .addHeader("Authorization", "Bearer YOUR_BEARER_TOKEN")
+                .addHeader("Content-Type", "image/jpeg")
+                .put(bytes.toRequestBody("image/jpeg".toMediaType()))
+                .build()
+
+            val client = OkHttpClient()
+            val response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                // URL pública para acesso à imagem (com /public/ na URL)
+                val imageUrl = "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-discussao/$fileName"
+                Log.d("UPLOAD_SUPABASE", "Imagem enviada com sucesso: $imageUrl")
+                imageUrl
+            } else {
+                Log.e("UPLOAD_SUPABASE", "Erro: ${response.code}: ${response.message}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("UPLOAD_SUPABASE", "Erro na exceção: ${e.message}")
+            null
+        }
     }
 }

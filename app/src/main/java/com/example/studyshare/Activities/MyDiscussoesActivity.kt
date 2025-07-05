@@ -51,9 +51,7 @@ class MyDiscussoesActivity : BaseActivity() {
         binding.navigationViewMyDiscussoes.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
-                    val editor = sharedPref.edit()
-                    editor.clear()
-                    editor.apply()
+                    sharedPref.edit().clear().apply()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                     true
@@ -98,11 +96,13 @@ class MyDiscussoesActivity : BaseActivity() {
 
     private fun setupRecyclerView() {
         discussaoAdapter = DiscussaoAdapter { discussao ->
-            val intent = Intent(this, DiscussaoDetalheActivity::class.java)
-            intent.putExtra("discussao_id", discussao.id)
-            intent.putExtra("titulo", discussao.titulo)
-            intent.putExtra("descricao", discussao.descricao)
-            intent.putExtra("criador_id", discussao.criador_id)
+            val intent = Intent(this, DiscussaoDetalheActivity::class.java).apply {
+                putExtra("discussao_id", discussao.id)
+                putExtra("titulo", discussao.titulo)
+                putExtra("descricao", discussao.descricao)
+                putExtra("criador_id", discussao.criador_id)
+                putExtra("imagem_discussao_url", discussao.imagem_discussao_url)
+            }
             startActivity(intent)
         }
 

@@ -33,9 +33,11 @@ class DiscussaoAdapter(
             binding.tvTitulo.text = discussao.titulo ?: "Sem título"
             binding.tvDescricao.text = discussao.descricao ?: "Sem descrição"
 
-            if (!discussao.imagem_discussao_url.isNullOrEmpty()) {
+            if (!discussao.imagem_discussao_url.isNullOrBlank()) {
                 Glide.with(binding.root.context)
                     .load(discussao.imagem_discussao_url)
+                    .placeholder(android.R.color.darker_gray)
+                    .centerCrop()
                     .into(binding.ivImagemDiscussao)
             } else {
                 binding.ivImagemDiscussao.setImageResource(android.R.color.darker_gray)
