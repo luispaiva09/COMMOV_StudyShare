@@ -55,6 +55,10 @@ class AddCategoriaActivity : BaseActivity() {
                     startActivity(Intent(this, MyMateriaisActivity::class.java))
                     true
                 }
+                R.id.nav_discussoes -> {
+                    startActivity(Intent(this, MyDiscussoesActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

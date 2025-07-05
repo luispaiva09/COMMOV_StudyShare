@@ -57,6 +57,18 @@
             android:name=".Activities.MaterialDetalheActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.AddDiscussaoActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".Activities.MyDiscussoesActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".Activities.DiscussaoDetalheActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

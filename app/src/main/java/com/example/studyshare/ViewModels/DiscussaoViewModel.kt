@@ -77,6 +77,16 @@ class DiscussaoViewModel(private val repository: DiscussaoRepository) : ViewMode
         }
     }
 
+    fun carregarDiscussoesByCriador(criadorId: Int) {
+        viewModelScope.launch {
+            try {
+                _discussoes.value = repository.getDiscussoesByCriador(criadorId)
+            } catch (e: Exception) {
+                _erroMensagem.value = "Erro ao carregar discussões: ${e.message}"
+            }
+        }
+    }
+
     fun resetErro() {
         _erroMensagem.value = null
     }

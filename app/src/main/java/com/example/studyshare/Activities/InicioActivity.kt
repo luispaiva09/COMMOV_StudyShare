@@ -27,12 +27,16 @@ class InicioActivity : BaseActivity() {
 
         binding.buttonContinuar.setOnClickListener {
             val intent = Intent(this, AddMaterialActivity::class.java)
-            intent.putExtra("userId", userId)
             startActivity(intent)
         }
 
         binding.buttonCategoria.setOnClickListener {
             val intent = Intent(this, AddCategoriaActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonAddDiscussao.setOnClickListener {
+            val intent = Intent(this, AddDiscussaoActivity::class.java)
             startActivity(intent)
         }
 
@@ -52,6 +56,10 @@ class InicioActivity : BaseActivity() {
                 }
                 R.id.nav_materiais -> {
                     startActivity(Intent(this, MyMateriaisActivity::class.java))
+                    true
+                }
+                R.id.nav_discussoes -> {
+                    startActivity(Intent(this, MyDiscussoesActivity::class.java))
                     true
                 }
                 else -> true

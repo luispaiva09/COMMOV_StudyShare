@@ -126,6 +126,7 @@ interface ApiService {
     @GET("comentarios")
     suspend fun getComentarioById(@Query("id") id: String): List<Comentario>
 
+    @Headers("Prefer: return=representation")
     @POST("comentarios")
     suspend fun createComentario(@Body comentario: Comentario): List<Comentario>
 
@@ -144,6 +145,7 @@ interface ApiService {
     @GET("syncoffline")
     suspend fun getSyncOfflineById(@Query("id") id: String): List<SyncOffline>
 
+    @Headers("Prefer: return=representation")
     @POST("syncoffline")
     suspend fun createSyncOffline(@Body syncOffline: SyncOffline): List<SyncOffline>
 
@@ -159,6 +161,7 @@ interface ApiService {
     @GET("estatisticas")
     suspend fun getEstatisticaById(@Query("id") id: String): List<Estatistica>
 
+    @Headers("Prefer: return=representation")
     @POST("estatisticas")
     suspend fun createEstatistica(@Body estatistica: Estatistica): List<Estatistica>
 
@@ -174,6 +177,7 @@ interface ApiService {
     @GET("sessoesestudo")
     suspend fun getSessaoEstudoById(@Query("id") id: String): List<SessaoEstudo>
 
+    @Headers("Prefer: return=representation")
     @POST("sessoesestudo")
     suspend fun createSessaoEstudo(@Body sessaoEstudo: SessaoEstudo): List<SessaoEstudo>
 
@@ -192,6 +196,7 @@ interface ApiService {
     @GET("participantessessao")
     suspend fun getParticipanteSessaoById(@Query("id") id: String): List<ParticipanteSessao>
 
+    @Headers("Prefer: return=representation")
     @POST("participantessessao")
     suspend fun createParticipanteSessao(@Body participanteSessao: ParticipanteSessao): List<ParticipanteSessao>
 
@@ -207,6 +212,7 @@ interface ApiService {
     @GET("discussoes")
     suspend fun getDiscussaoById(@Query("id") id: String): List<Discussao>
 
+    @Headers("Prefer: return=representation")
     @POST("discussoes")
     suspend fun createDiscussao(@Body discussao: Discussao): List<Discussao>
 
@@ -215,6 +221,9 @@ interface ApiService {
 
     @DELETE("discussoes")
     suspend fun deleteDiscussao(@Query("id") id: String): Response<Unit>
+
+    @GET("discussoes")
+    suspend fun getDiscussoesByCriador(@Query("criador_id") criadorId: String): List<Discussao>
 
 
     // MENSAGENS DISCUSSAO
@@ -225,6 +234,7 @@ interface ApiService {
     @GET("mensagensdiscussao")
     suspend fun getMensagemDiscussaoById(@Query("id") id: String): List<MensagemDiscussao>
 
+    @Headers("Prefer: return=representation")
     @POST("mensagensdiscussao")
     suspend fun createMensagemDiscussao(@Body mensagemDiscussao: MensagemDiscussao): List<MensagemDiscussao>
 

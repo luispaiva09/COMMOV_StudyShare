@@ -57,6 +57,14 @@
                     android:layout_marginTop="16dp"
                     android:padding="12dp" />
 
+                <Button
+                    android:id="@+id/buttonAddDiscussao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Adicionar Discussao"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
