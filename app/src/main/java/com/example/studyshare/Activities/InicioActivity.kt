@@ -40,6 +40,11 @@ class InicioActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        binding.buttonAddSessaoEstudo.setOnClickListener {
+            val intent = Intent(this, AddSessaoEstudoActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.navigationViewInicio.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
