@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.studyshare.DataClasses.MaterialDidatico
 import com.example.studyshare.databinding.ItemMaterialBinding
 
-class MaterialAdapter : ListAdapter<MaterialDidatico, MaterialAdapter.MaterialViewHolder>(DiffCallback()) {
+class MaterialAdapter(private val onItemClick: (MaterialDidatico) -> Unit) : ListAdapter<MaterialDidatico, MaterialAdapter.MaterialViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialViewHolder {
         val binding = ItemMaterialBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -31,6 +31,10 @@ class MaterialAdapter : ListAdapter<MaterialDidatico, MaterialAdapter.MaterialVi
                     .into(binding.ivImagemCapa)
             } else {
                 binding.ivImagemCapa.setImageResource(android.R.color.darker_gray)
+            }
+
+            binding.root.setOnClickListener {
+                onItemClick(material)
             }
         }
     }

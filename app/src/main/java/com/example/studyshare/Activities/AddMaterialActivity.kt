@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.DataClasses.Categoria
 import com.example.studyshare.DataClasses.MaterialDidatico
+import com.example.studyshare.R
 import com.example.studyshare.Repositories.CategoriaRepository
 import com.example.studyshare.Repositories.MaterialDidaticoRepository
 import com.example.studyshare.RetrofitClient
@@ -50,10 +51,35 @@ class AddMaterialActivity : BaseActivity() {
         binding = ActivityAddMaterialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupHeader(binding.headerLayout.root, null)
+        setupHeader(
+            drawerLayout = binding.drawerLayoutAddMaterial,
+            headerLayout = binding.headerLayout.root
+        )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val autorId = sharedPref.getInt("userId", -1)
+
+        binding.navigationViewAddMaterial.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+                    val editor = sharedPref.edit()
+                    editor.clear()
+                    editor.apply()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_inicio -> {
+                    startActivity(Intent(this, InicioActivity::class.java))
+                    true
+                }
+                R.id.nav_materiais -> {
+                    startActivity(Intent(this, MyMateriaisActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         lifecycleScope.launch {
             materialViewModel.materialCriado.collectLatest { sucesso ->
