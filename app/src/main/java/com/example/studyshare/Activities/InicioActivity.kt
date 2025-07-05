@@ -2,12 +2,8 @@ package com.example.studyshare.Activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.example.studyshare.R
 import com.example.studyshare.databinding.ActivityInicioBinding
-import com.google.android.material.navigation.NavigationView
 
 class InicioActivity : BaseActivity() {
 
@@ -17,6 +13,11 @@ class InicioActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupHeader(
+            drawerLayout = binding.drawerLayoutInicio,
+            headerLayout = binding.headerLayoutInicio.root
+        )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val userId = sharedPref.getInt("userId", -1)
@@ -35,21 +36,7 @@ class InicioActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navigationView = findViewById<NavigationView>(R.id.navigationView)
-        val buttonMenu = findViewById<ImageButton>(R.id.buttonMenu)
-        val buttonProfile = findViewById<ImageButton>(R.id.buttonPerfil)
-
-        buttonMenu.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.END)
-        }
-
-        buttonProfile.setOnClickListener {
-            val intent = Intent(this, PerfilActivity::class.java)
-            startActivity(intent)
-        }
-
-        navigationView.setNavigationItemSelectedListener { menuItem ->
+        binding.navigationViewInicio.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
                     val editor = sharedPref.edit()
@@ -57,6 +44,10 @@ class InicioActivity : BaseActivity() {
                     editor.apply()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
+                    true
+                }
+                R.id.nav_inicio -> {
+                    startActivity(Intent(this, InicioActivity::class.java))
                     true
                 }
                 R.id.nav_materiais -> {

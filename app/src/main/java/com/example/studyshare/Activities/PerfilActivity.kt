@@ -28,7 +28,7 @@ class PerfilActivity : BaseActivity() {
         // Configura o cabeçalho da base
         setupHeader(
             drawerLayout = binding.drawerLayoutPerfil,
-            headerLayout = binding.headerLayoutPerfil
+            headerLayout = binding.headerLayoutPerfil.root
         )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
