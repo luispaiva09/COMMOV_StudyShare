@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.studyshare.R
 import com.example.studyshare.Repositories.UtilizadorRepository
@@ -76,6 +75,10 @@ class PerfilActivity : BaseActivity() {
                 }
                 R.id.nav_inicio -> {
                     startActivity(Intent(this, InicioActivity::class.java))
+                    true
+                }
+                R.id.nav_materiais -> {
+                    startActivity(Intent(this, MyMateriaisActivity::class.java))
                     true
                 }
                 else -> false

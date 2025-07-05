@@ -3,7 +3,6 @@ package com.example.studyshare.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.studyshare.R
@@ -58,6 +57,10 @@ class InicioActivity : BaseActivity() {
                     editor.apply()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
+                    true
+                }
+                R.id.nav_materiais -> {
+                    startActivity(Intent(this, MyMateriaisActivity::class.java))
                     true
                 }
                 else -> true

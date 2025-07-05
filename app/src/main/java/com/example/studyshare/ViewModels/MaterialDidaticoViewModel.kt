@@ -77,6 +77,16 @@ class MaterialDidaticoViewModel(private val repository: MaterialDidaticoReposito
         }
     }
 
+    fun carregarMateriaisDoAutor(autorId: Int) {
+        viewModelScope.launch {
+            try {
+                _materiais.value = repository.getMaterialByAutor(autorId)
+            } catch (e: Exception) {
+                _erroMensagem.value = "Erro ao carregar seus materiais: ${e.message}"
+            }
+        }
+    }
+
     fun resetErro() {
         _erroMensagem.value = null
     }

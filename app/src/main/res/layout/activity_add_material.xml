@@ -37,12 +37,14 @@
                 android:hint="Descrição (opcional)"
                 android:inputType="textMultiLine" />
 
-            <EditText
-                android:id="@+id/etImagemCapa"
+            <!-- Botão para escolher a imagem de capa -->
+            <Button
+                android:id="@+id/buttonEscolherImagem"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="URL da Imagem Capa"
-                android:inputType="textUri" />
+                android:layout_height="wrap_content"
+                android:text="Escolher Imagem de Capa"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
 
             <EditText
                 android:id="@+id/etTipo"
@@ -62,7 +64,7 @@
             <Spinner
                 android:id="@+id/spinnerCategorias"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp" />
 

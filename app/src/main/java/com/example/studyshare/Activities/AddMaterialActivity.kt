@@ -1,6 +1,7 @@
 package com.example.studyshare.Activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -19,6 +20,10 @@ import com.example.studyshare.ViewModels.MaterialDidaticoViewModel
 import com.example.studyshare.databinding.ActivityAddMaterialBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class AddMaterialActivity : BaseActivity() {
 
@@ -37,12 +42,14 @@ class AddMaterialActivity : BaseActivity() {
 
     private var listaCategorias: List<Categoria> = emptyList()
 
+    private val PICK_IMAGE_REQUEST = 1
+    private var imageUri: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddMaterialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Setup do header usando a root da view do header
         setupHeader(binding.headerLayout.root, null)
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
@@ -83,15 +90,20 @@ class AddMaterialActivity : BaseActivity() {
             }
         }
 
+        binding.buttonEscolherImagem.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
+
         binding.buttonSubmeter.setOnClickListener {
             val titulo = binding.etTitulo.text.toString().trim()
             val descricao = binding.etDescricao.text.toString().trim().ifEmpty { null }
-            val imagemCapaUrl = binding.etImagemCapa.text.toString().trim().ifEmpty { null }
             val tipo = binding.etTipo.text.toString().trim()
             val ficheiroUrl = binding.etFicheiroUrl.text.toString().trim()
             val privado = binding.checkBoxPrivado.isChecked
 
-            if (titulo.isEmpty() || tipo.isEmpty() || ficheiroUrl.isEmpty() || autorId == null) {
+            if (titulo.isEmpty() || tipo.isEmpty() || ficheiroUrl.isEmpty() || autorId == -1) {
                 Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -102,29 +114,73 @@ class AddMaterialActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            val novoMaterial = MaterialDidatico(
-                titulo = titulo,
-                descricao = descricao,
-                imagem_capa_url = imagemCapaUrl,
-                tipo = tipo,
-                categoria_id = categoriaSelecionada.id,
-                autor_id = autorId,
-                ficheiro_url = ficheiroUrl,
-                privado = privado
-            )
+            lifecycleScope.launch {
+                var imagemCapaUrl: String? = null
 
-            materialViewModel.criarMaterial(novoMaterial)
+                if (imageUri != null) {
+                    imagemCapaUrl = uploadImagemParaSupabase(imageUri!!)
+                }
+
+                val novoMaterial = MaterialDidatico(
+                    titulo = titulo,
+                    descricao = descricao,
+                    imagem_capa_url = imagemCapaUrl,
+                    tipo = tipo,
+                    categoria_id = categoriaSelecionada.id,
+                    autor_id = autorId,
+                    ficheiro_url = ficheiroUrl,
+                    privado = privado
+                )
+
+                materialViewModel.criarMaterial(novoMaterial)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+            imageUri = data.data
+            Toast.makeText(this, "Imagem selecionada!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private suspend fun uploadImagemParaSupabase(uri: Uri): String? {
+        val contentResolver = contentResolver
+        val inputStream = contentResolver.openInputStream(uri) ?: return null
+        val bytes = inputStream.readBytes()
+        inputStream.close()
+
+        val fileName = "capa_${System.currentTimeMillis()}.jpg"
+
+        val request = Request.Builder()
+            .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-capa/$fileName")
+            .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+            .addHeader("Content-Type", "image/jpeg")
+            .put(bytes.toRequestBody("image/jpeg".toMediaType()))
+            .build()
+
+        val client = OkHttpClient()
+        val response = client.newCall(request).execute()
+
+        return if (response.isSuccessful) {
+            "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-capa/$fileName"
+        } else {
+            Log.e("UploadImagem", "Erro: ${response.code}: ${response.message}")
+            null
         }
     }
 
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
-        binding.etImagemCapa.text?.clear()
         binding.etTipo.text?.clear()
         binding.etFicheiroUrl.text?.clear()
         binding.checkBoxPrivado.isChecked = false
         binding.spinnerCategorias.setSelection(0)
+        imageUri = null
         materialViewModel.resetErro()
     }
+
 }

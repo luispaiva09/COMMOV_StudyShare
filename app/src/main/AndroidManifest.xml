@@ -49,6 +49,10 @@
             android:exported="true"
             android:enableOnBackInvokedCallback="true"/>
 
+        <activity
+            android:name=".Activities.MyMateriaisActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

@@ -51,21 +51,13 @@ interface ApiService {
     suspend fun deleteUtilizador(@Query("id") id: String): Response<Unit>
 
     @GET("utilizadores")
-    suspend fun verificarUsernameExistente(
-        @Query("username") username: String,
-        @Query("select") select: String = "id"
-    ): List<Utilizador>
+    suspend fun verificarUsernameExistente(@Query("username") username: String, @Query("select") select: String = "id"): List<Utilizador>
 
     @GET("utilizadores")
-    suspend fun verificarEmailExistente(
-        @Query("email") email: String,
-        @Query("select") select: String = "id"
-    ): List<Utilizador>
+    suspend fun verificarEmailExistente(@Query("email") email: String, @Query("select") select: String = "id"): List<Utilizador>
 
     @POST("rpc/login_utilizador")
-    suspend fun loginUtilizador(
-        @Body loginRequest: LoginRequest
-    ): List<LoginResponse>
+    suspend fun loginUtilizador(@Body loginRequest: LoginRequest): List<LoginResponse>
 
     // MATERIAIS DIDATICOS
 
@@ -85,6 +77,8 @@ interface ApiService {
     @DELETE("materiaisdidaticos")
     suspend fun deleteMaterialDidatico(@Query("id") id: String): Response<Unit>
 
+    @GET("materiaisdidaticos")
+    suspend fun getMateriaisByAutor(@Query("autor_id") autor_id: String ): List<MaterialDidatico>
 
     // CATEGORIAS
 
