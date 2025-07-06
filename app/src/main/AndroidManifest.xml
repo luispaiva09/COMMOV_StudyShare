@@ -95,6 +95,14 @@
             android:name="org.jitsi.meet.sdk.JitsiMeetActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.EditarPerfilActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".Activities.AlterarPasswordActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

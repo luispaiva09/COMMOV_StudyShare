@@ -29,18 +29,18 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
     private val _utilizadores = MutableStateFlow<List<Utilizador>>(emptyList())
     val utilizadores: StateFlow<List<Utilizador>> = _utilizadores
 
+    // Função para registar utilizador
     fun registarUtilizador(utilizador: Utilizador) {
         viewModelScope.launch {
             try {
                 val usernameExiste = repository.verificarUsername(utilizador.username)
-                val emailExiste = repository.verificarEmail(utilizador.email)
-
                 if (usernameExiste) {
                     _registoSucesso.value = false
                     _erroMensagem.value = "Username já existe."
                     return@launch
                 }
 
+                val emailExiste = repository.verificarEmail(utilizador.email)
                 if (emailExiste) {
                     _registoSucesso.value = false
                     _erroMensagem.value = "Email já existe."
@@ -48,7 +48,6 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
                 }
 
                 val response = repository.registarUtilizador(utilizador)
-
                 if (response.isSuccessful) {
                     _registoSucesso.value = true
                     _erroMensagem.value = null
@@ -56,7 +55,6 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
                     _registoSucesso.value = false
                     _erroMensagem.value = "Falha ao registar utilizador."
                 }
-
             } catch (e: Exception) {
                 _registoSucesso.value = false
                 _erroMensagem.value = e.message ?: "Erro desconhecido"
@@ -64,6 +62,7 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
+    // Função para login
     fun loginUtilizador(username: String, password: String) {
         viewModelScope.launch {
             try {
@@ -82,6 +81,7 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
+    // Buscar utilizador por id
     fun getUtilizadorById(id: Int) {
         viewModelScope.launch {
             try {
@@ -95,6 +95,7 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
+    // Buscar lista de utilizadores
     fun getUtilizadores() {
         viewModelScope.launch {
             try {
@@ -110,10 +111,14 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
     fun updateUtilizador(id: Int, utilizador: Utilizador) {
         viewModelScope.launch {
             try {
-                val updatedUser = repository.updateUtilizador(id, utilizador)
-                _utilizadorPerfil.value = updatedUser
-                _updateSucesso.value = true
-                _erroMensagem.value = null
+                val sucesso = repository.updateUtilizador(id, utilizador)
+                _updateSucesso.value = sucesso
+                if (sucesso) {
+                    _utilizadorPerfil.value = utilizador
+                    _erroMensagem.value = null
+                } else {
+                    _erroMensagem.value = "Falha ao atualizar utilizador."
+                }
             } catch (e: Exception) {
                 _updateSucesso.value = false
                 _erroMensagem.value = e.message ?: "Erro ao atualizar utilizador."
@@ -121,6 +126,73 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
+    // Função auxiliar para atualizar campos específicos do utilizador
+    fun atualizarUtilizador(
+        id: Int,
+        nome: String,
+        username: String,
+        email: String,
+        telefone: Int
+    ) {
+        val utilizadorAtual = _utilizadorPerfil.value
+        if (utilizadorAtual == null) {
+            _erroMensagem.value = "Utilizador não carregado."
+            _updateSucesso.value = false
+            return
+        }
+
+        val utilizadorAtualizado = Utilizador(
+            id = id,
+            username = username,
+            email = email,
+            password = utilizadorAtual.password,
+            tipo_utilizador = utilizadorAtual.tipo_utilizador,
+            estado = utilizadorAtual.estado,
+            nome = nome,
+            n_telemovel = telefone,
+            data_registo = utilizadorAtual.data_registo,
+            morada = utilizadorAtual.morada,
+            ultimo_login = utilizadorAtual.ultimo_login,
+            foto_perfil_url = utilizadorAtual.foto_perfil_url
+        )
+        updateUtilizador(id, utilizadorAtualizado)
+    }
+
+    fun updateUtilizadorParcial(id: Int, updates: Map<String, Any>) {
+        viewModelScope.launch {
+            try {
+                val sucesso = repository.updateUtilizadorParcial(id, updates)
+                _updateSucesso.value = sucesso
+                if (sucesso) {
+                    // Atualiza o utilizador local, recarregando do backend por exemplo
+                    getUtilizadorById(id)
+                    _erroMensagem.value = null
+                } else {
+                    _erroMensagem.value = "Falha ao atualizar utilizador."
+                }
+            } catch (e: Exception) {
+                _updateSucesso.value = false
+                _erroMensagem.value = e.message ?: "Erro ao atualizar utilizador."
+            }
+        }
+    }
+
+    // Alterar password
+    suspend fun alterarPassword(id: Int, oldPassword: String, newPassword: String): Boolean {
+        return try {
+            val utilizador = repository.getUtilizadorById(id)
+            if (utilizador == null) return false
+            if (utilizador.password != oldPassword) {
+                false
+            } else {
+                repository.alterarPassword(id, oldPassword, newPassword)
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    // Resetar estados
     fun resetEstado() {
         _registoSucesso.value = null
         _updateSucesso.value = null

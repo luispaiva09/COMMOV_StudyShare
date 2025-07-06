@@ -15,6 +15,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
@@ -28,6 +29,12 @@ data class LoginResponse(
     val id: Int,
     val username: String,
     val email: String
+)
+
+data class AlterarPasswordRequest(
+    val p_user_id: Int,
+    val p_old_password: String,
+    val p_new_password: String
 )
 
 interface ApiService {
@@ -57,6 +64,16 @@ interface ApiService {
 
     @POST("rpc/login_utilizador")
     suspend fun loginUtilizador(@Body loginRequest: LoginRequest): List<LoginResponse>
+
+    @POST("rpc/alterar_password")
+    suspend fun alterarPassword(@Body body: AlterarPasswordRequest): Response<Unit>
+
+    @Headers("Prefer: return=representation")
+    @PATCH("utilizadores")
+    suspend fun updateUtilizadorParcial(
+        @Query("id") id: String,
+        @Body updates: Map<String, @JvmSuppressWildcards Any>
+    ): List<Utilizador>
 
     // MATERIAIS DIDATICOS
 

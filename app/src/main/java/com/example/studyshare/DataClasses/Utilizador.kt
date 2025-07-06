@@ -11,7 +11,8 @@ data class Utilizador(
     val nome: String? = null,
     val n_telemovel: Int? = null,
     val estado: String,
-    val ultimo_login: String? = null
+    val ultimo_login: String? = null,
+    val foto_perfil_url: String? = null
 )
 
 
