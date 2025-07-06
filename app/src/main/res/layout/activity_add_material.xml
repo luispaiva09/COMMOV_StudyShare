@@ -52,19 +52,26 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp" />
 
-                <EditText
-                    android:id="@+id/etTipo"
+                <Spinner
+                    android:id="@+id/spinnerTipo"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:hint="Tipo (PDF, Vídeo, etc)"
-                    android:inputType="text" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
 
-                <EditText
-                    android:id="@+id/etFicheiroUrl"
+                <Button
+                    android:id="@+id/buttonEscolherFicheiros"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:hint="URL do Ficheiro"
-                    android:inputType="textUri" />
+                    android:layout_height="wrap_content"
+                    android:text="Escolher Ficheiros" />
+
+                <TextView
+                    android:id="@+id/textViewFicheirosSelecionados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nenhum ficheiro selecionado"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black" />
 
                 <!-- Spinner de seleção de Categoria -->
                 <Spinner

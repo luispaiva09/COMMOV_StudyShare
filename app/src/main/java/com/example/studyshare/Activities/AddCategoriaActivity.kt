@@ -3,6 +3,7 @@ package com.example.studyshare.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -76,7 +77,7 @@ class AddCategoriaActivity : BaseActivity() {
             viewModel.categoriaCriada.collectLatest { sucesso ->
                 sucesso?.let {
                     if (it) {
-                        Toast.makeText(this@AddCategoriaActivity, "Categoria criada com sucesso!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@AddCategoriaActivity, getString(R.string.avisoCatSuccess), Toast.LENGTH_LONG).show()
                         limparCampos()
                         startActivity(Intent(this@AddCategoriaActivity, InicioActivity::class.java))
                         finish()
@@ -89,7 +90,8 @@ class AddCategoriaActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.erroMensagem.collectLatest { erro ->
                 erro?.let {
-                    Toast.makeText(this@AddCategoriaActivity, "Erro: $it", Toast.LENGTH_LONG).show()
+                    val mensagem = getString(R.string.mensagem_erro, it)
+                    Toast.makeText(this@AddCategoriaActivity, mensagem, Toast.LENGTH_LONG).show()
                     Log.e("AddCategoriaActivity", "Erro ao criar categoria", Throwable(it))
                 }
             }
@@ -98,8 +100,11 @@ class AddCategoriaActivity : BaseActivity() {
         binding.btnAdicionarCategoria.setOnClickListener {
             val nome = binding.etNomeCategoria.text.toString().trim()
 
+            val ButtonAddCategoria = findViewById<Button>(R.id.btnAdicionarCategoria)
+            ButtonAddCategoria.text = getString(R.string.botao_AddCategoria)
+
             if (nome.isEmpty()) {
-                Toast.makeText(this, "Por favor, insira o nome da categoria!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.avisoNomeCat), Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">StudyShare</string>
+    <string name="botao_AddCategoria">Adicionar Categoria</string>
+    <string name="avisoCatSuccess">Categoria criada com sucesso!</string>
+    <string name="mensagem_erro">Erro: %1$s</string>
+    <string name="avisoNomeCat">Por favor, insira o nome da Categoria!</string>
+    <string name="HintNomeCat">Nome da Categoria</string>
+    <string name="TitleInicio">Início</string>
+    <string name="TitlePesquisar">Pesquisar</string>
+    <string name="TitleDiscussoes">As Minhas Discussões</string>
+    <string name="TitleSessoesEstudo">As Minhas Sessões de Estudo</string>
+    <string name="TitleMateriais">Os Meus Materiais</string>
+    <string name="TitleCategorias">Categorias</string>
+    <string name="TitleFavoritos">Favoritos</string>
+    <string name="TitleEstatisticas">Estatísticas</string>
+    <string name="TitleSobre">Sobre</string>
+    <string name="TitleLogout">Logout</string>
+
 </resources>

@@ -29,15 +29,15 @@
                 <EditText
                     android:id="@+id/etNomeCategoria"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nome da Categoria"
+                    android:layout_height="48dp"
+                    android:hint="@string/HintNomeCat"
                     android:inputType="textPersonName" />
 
                 <Button
                     android:id="@+id/btnAdicionarCategoria"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Adicionar Categoria" />
+                    android:text="@string/botao_AddCategoria" />
 
             </LinearLayout>
         </ScrollView>

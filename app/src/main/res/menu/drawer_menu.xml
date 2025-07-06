@@ -3,34 +3,34 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_inicio"
-            android:title="Início" />
+            android:title="@string/TitleInicio" />
         <item
             android:id="@+id/nav_pesquisar"
-            android:title="Pesquisar" />
+            android:title="@string/TitlePesquisar" />
         <item
             android:id="@+id/nav_discussoes"
-            android:title="Discussões" />
+            android:title="@string/TitleDiscussoes" />
         <item
             android:id="@+id/nav_sessoes"
-            android:title="Sessões de Estudo" />
+            android:title="@string/TitleSessoesEstudo" />
         <item
             android:id="@+id/nav_materiais"
-            android:title="Os meus Materiais" />
+            android:title="@string/TitleMateriais" />
         <item
             android:id="@+id/nav_categorias"
-            android:title="Categorias" />
+            android:title="@string/TitleCategorias" />
         <item
             android:id="@+id/nav_favoritos"
-            android:title="Favoritos" />
+            android:title="@string/TitleFavoritos" />
         <item
             android:id="@+id/nav_estatisticas"
-            android:title="Estatísticas" />
+            android:title="@string/TitleEstatisticas" />
         <item
             android:id="@+id/nav_sobre"
-            android:title="Sobre" />
+            android:title="@string/TitleSobre" />
     </group>
     <item
         android:id="@+id/nav_logout"
-        android:title="Logout"
+        android:title="@string/TitleLogout"
         android:titleTextColor="#FF0000" />
 </menu>

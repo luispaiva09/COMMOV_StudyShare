@@ -46,8 +46,13 @@ class AddMaterialActivity : BaseActivity() {
 
     private var listaCategorias: List<Categoria> = emptyList()
 
+    private val tipos = listOf("texto", "imagem", "video", "audio", "ficheiro")
+
     private val PICK_IMAGE_REQUEST = 1
+    private val PICK_FILES_REQUEST = 2
+
     private var imageUri: Uri? = null
+    private var selectedUris: List<Uri> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,21 +136,43 @@ class AddMaterialActivity : BaseActivity() {
             }
         }
 
+        // Configurar spinner de tipos de ficheiro
+        val adapterTipo = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
+        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTipo.adapter = adapterTipo
+
         binding.buttonEscolherImagem.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
 
+        binding.buttonEscolherFicheiros.setOnClickListener {
+            val tipoSelecionado = tipos.getOrNull(binding.spinnerTipo.selectedItemPosition) ?: ""
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+
+            when (tipoSelecionado) {
+                "imagem" -> intent.type = "image/*"
+                "video" -> intent.type = "video/*"
+                "audio" -> intent.type = "audio/*"
+                "texto" -> intent.type = "text/*"
+                "ficheiro" -> intent.type = "*/*"
+                else -> intent.type = "*/*"
+            }
+
+            startActivityForResult(intent, PICK_FILES_REQUEST)
+        }
+
         binding.buttonSubmeter.setOnClickListener {
             val titulo = binding.etTitulo.text.toString().trim()
             val descricao = binding.etDescricao.text.toString().trim().ifEmpty { null }
-            val tipo = binding.etTipo.text.toString().trim()
-            val ficheiroUrl = binding.etFicheiroUrl.text.toString().trim()
+            val tipoSelecionado = tipos.getOrNull(binding.spinnerTipo.selectedItemPosition) ?: ""
             val privado = binding.checkBoxPrivado.isChecked
 
-            if (titulo.isEmpty() || tipo.isEmpty() || ficheiroUrl.isEmpty() || autorId == -1) {
-                Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show()
+            if (titulo.isEmpty() || tipoSelecionado.isEmpty() || selectedUris.isEmpty() || autorId == -1) {
+                Toast.makeText(this, "Preencha todos os campos obrigatórios e selecione ficheiros!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -165,14 +192,31 @@ class AddMaterialActivity : BaseActivity() {
                     Log.d("UploadImagem", "URL da imagem após upload: $imagemCapaUrl")
                 }
 
+                val urls = mutableListOf<String>()
+                for (uri in selectedUris) {
+                    val url = withContext(Dispatchers.IO) {
+                        uploadFicheiroParaSupabase(uri)
+                    }
+                    if (url != null) {
+                        urls.add(url)
+                    }
+                }
+
+                if (urls.isEmpty()) {
+                    Toast.makeText(this@AddMaterialActivity, "Falha ao fazer upload dos ficheiros.", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+
+                val ficheiroUrlsConcatenadas = urls.joinToString(",")
+
                 val novoMaterial = MaterialDidatico(
                     titulo = titulo,
                     descricao = descricao,
                     imagem_capa_url = imagemCapaUrl,
-                    tipo = tipo,
+                    tipo = tipoSelecionado,
                     categoria_id = categoriaSelecionada.id,
                     autor_id = autorId,
-                    ficheiro_url = ficheiroUrl,
+                    ficheiro_url = ficheiroUrlsConcatenadas,
                     privado = privado
                 )
 
@@ -186,14 +230,40 @@ class AddMaterialActivity : BaseActivity() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             imageUri = data.data
             Toast.makeText(this, "Imagem selecionada!", Toast.LENGTH_SHORT).show()
+        } else if (requestCode == PICK_FILES_REQUEST && resultCode == RESULT_OK && data != null) {
+            val clipData = data.clipData
+            val uriList = mutableListOf<Uri>()
+
+            if (clipData != null) {
+                for (i in 0 until clipData.itemCount) {
+                    uriList.add(clipData.getItemAt(i).uri)
+                }
+            } else {
+                data.data?.let { uriList.add(it) }
+            }
+
+            selectedUris = uriList
+
+            // Atualizar TextView para mostrar os nomes dos ficheiros selecionados
+            val nomesFicheiros = selectedUris.mapNotNull { uri ->
+                uri.lastPathSegment?.substringAfterLast('/')
+            }
+            binding.textViewFicheirosSelecionados.text = if (nomesFicheiros.isNotEmpty()) {
+                nomesFicheiros.joinToString("\n")
+            } else {
+                "Nenhum ficheiro selecionado"
+            }
+
+            Toast.makeText(this, "${selectedUris.size} ficheiro(s) selecionado(s)!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
-        binding.etTipo.text?.clear()
-        binding.etFicheiroUrl.text?.clear()
+        binding.spinnerTipo.setSelection(0)
+        selectedUris = emptyList()
+        binding.textViewFicheirosSelecionados.text = "Nenhum ficheiro selecionado"
         binding.checkBoxPrivado.isChecked = false
         binding.spinnerCategorias.setSelection(0)
         imageUri = null
@@ -231,11 +301,49 @@ class AddMaterialActivity : BaseActivity() {
             if (response.isSuccessful) {
                 "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-capa/$fileName"
             } else {
-                Log.e("UploadImagem", "Erro: ${response.code}: ${response.message}")
                 null
             }
         } catch (e: Exception) {
-            Log.e("UploadImagem", "Erro na exceção: ${e.message}")
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun uploadFicheiroParaSupabase(uri: Uri): String? {
+        return try {
+            val contentResolver = contentResolver
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val bytes = inputStream.readBytes()
+            inputStream.close()
+
+            val fileName = uri.lastPathSegment?.substringAfterLast('/') ?: "file_${System.currentTimeMillis()}"
+
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "file",
+                    fileName,
+                    bytes.toRequestBody("*/*".toMediaType())
+                )
+                .build()
+
+            val request = Request.Builder()
+                .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/ficheiros/$fileName")
+                .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+                .post(requestBody)
+                .build()
+
+            val client = OkHttpClient()
+            val response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/ficheiros/$fileName"
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
