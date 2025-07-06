@@ -6,6 +6,7 @@ import com.example.studyshare.DataClasses.SessaoEstudo
 import com.example.studyshare.Repositories.SessaoEstudoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : ViewModel() {
@@ -17,13 +18,16 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
     val sessaoSelecionada: StateFlow<SessaoEstudo?> = _sessaoSelecionada
 
     private val _erroMensagem = MutableStateFlow<String?>(null)
-    val erroMensagem: StateFlow<String?> = _erroMensagem
+    val erroMensagem = _erroMensagem.asStateFlow()
 
     private val _sessaoCriada = MutableStateFlow<Boolean?>(null)
     val sessaoCriada: StateFlow<Boolean?> = _sessaoCriada
 
     private val _sessaoDetalhe = MutableStateFlow<SessaoEstudo?>(null)
     val sessaoDetalhe: StateFlow<SessaoEstudo?> = _sessaoDetalhe
+
+    private val _updateSuccess = MutableStateFlow<Boolean?>(null)
+    val updateSuccess: StateFlow<Boolean?> = _updateSuccess.asStateFlow()
 
     fun carregarSessoes() {
         viewModelScope.launch {
@@ -62,13 +66,17 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
         }
     }
 
-    fun atualizarSessao(id: Int, sessao: SessaoEstudo) {
+    fun atualizarSessao(sessaoId: Int, sessaoAtualizada: SessaoEstudo) {
         viewModelScope.launch {
             try {
-                repository.atualizarSessao(id, sessao)
-                carregarSessoes()
+                val sucesso = repository.atualizarSessao(sessaoId, sessaoAtualizada)
+                _updateSuccess.value = sucesso
+                if (!sucesso) {
+                    _erroMensagem.value = "Erro ao atualizar sessão."
+                }
             } catch (e: Exception) {
-                _erroMensagem.value = "Erro ao atualizar sessão: ${e.message}"
+                _updateSuccess.value = false
+                _erroMensagem.value = "Erro: ${e.message}"
             }
         }
     }
@@ -87,15 +95,19 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
     fun carregarSessoesByCriador(criadorId: Int) {
         viewModelScope.launch {
             try {
-                _sessoes.value = repository.getSessoesByCriador(criadorId)
+                val filtro = "eq.$criadorId"
+                _sessoes.value = repository.getSessoesByCriador(filtro)
             } catch (e: Exception) {
                 _erroMensagem.value = "Erro ao carregar sessões: ${e.message}"
             }
         }
     }
 
-
     fun resetErro() {
         _erroMensagem.value = null
+    }
+
+    fun resetUpdateStatus() {
+        _updateSuccess.value = null
     }
 }

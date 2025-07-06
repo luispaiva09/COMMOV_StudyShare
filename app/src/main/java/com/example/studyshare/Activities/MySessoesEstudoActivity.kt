@@ -111,15 +111,11 @@ class MySessoesEstudoActivity : BaseActivity() {
                 putExtra("descricao", sessao.descricao)
                 putExtra("data_hora", sessao.data_hora)
                 putExtra("estado_sessao", sessao.estado_sessao)
-                putExtra("videochamada_url", sessao.videochamada_url)
                 putExtra("criador_id", sessao.criador_id)
             }
             startActivity(intent)
         }
-
-        binding.recyclerViewSessoesEstudo.apply {
-            layoutManager = LinearLayoutManager(this@MySessoesEstudoActivity)
-            adapter = sessaoAdapter
-        }
+        binding.recyclerViewSessoesEstudo.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewSessoesEstudo.adapter = sessaoAdapter
     }
 }
