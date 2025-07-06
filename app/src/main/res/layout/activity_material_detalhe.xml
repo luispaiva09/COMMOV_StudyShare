@@ -54,14 +54,6 @@
                     android:paddingTop="16dp"
                     android:textSize="16sp" />
 
-                <!-- Tipo -->
-                <TextView
-                    android:id="@+id/tvTipo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="12dp"
-                    android:textSize="16sp" />
-
                 <!-- URL do ficheiro -->
                 <TextView
                     android:id="@+id/tvFicheiroUrl"

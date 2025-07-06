@@ -136,11 +136,6 @@ class AddMaterialActivity : BaseActivity() {
             }
         }
 
-        // Configurar spinner de tipos de ficheiro
-        val adapterTipo = ArrayAdapter(this, android.R.layout.simple_spinner_item, tipos)
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerTipo.adapter = adapterTipo
-
         binding.buttonEscolherImagem.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -148,30 +143,20 @@ class AddMaterialActivity : BaseActivity() {
         }
 
         binding.buttonEscolherFicheiros.setOnClickListener {
-            val tipoSelecionado = tipos.getOrNull(binding.spinnerTipo.selectedItemPosition) ?: ""
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-
-            when (tipoSelecionado) {
-                "imagem" -> intent.type = "image/*"
-                "video" -> intent.type = "video/*"
-                "audio" -> intent.type = "audio/*"
-                "texto" -> intent.type = "text/*"
-                "ficheiro" -> intent.type = "*/*"
-                else -> intent.type = "*/*"
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             }
-
             startActivityForResult(intent, PICK_FILES_REQUEST)
         }
 
         binding.buttonSubmeter.setOnClickListener {
             val titulo = binding.etTitulo.text.toString().trim()
             val descricao = binding.etDescricao.text.toString().trim().ifEmpty { null }
-            val tipoSelecionado = tipos.getOrNull(binding.spinnerTipo.selectedItemPosition) ?: ""
             val privado = binding.checkBoxPrivado.isChecked
 
-            if (titulo.isEmpty() || tipoSelecionado.isEmpty() || selectedUris.isEmpty() || autorId == -1) {
+            if (titulo.isEmpty() || selectedUris.isEmpty() || autorId == -1) {
                 Toast.makeText(this, "Preencha todos os campos obrigatórios e selecione ficheiros!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -189,16 +174,11 @@ class AddMaterialActivity : BaseActivity() {
                     imagemCapaUrl = withContext(Dispatchers.IO) {
                         uploadImagemParaSupabase(imageUri!!)
                     }
-                    Log.d("UploadImagem", "URL da imagem após upload: $imagemCapaUrl")
                 }
 
-                val urls = mutableListOf<String>()
-                for (uri in selectedUris) {
-                    val url = withContext(Dispatchers.IO) {
+                val urls = withContext(Dispatchers.IO) {
+                    selectedUris.mapNotNull { uri ->
                         uploadFicheiroParaSupabase(uri)
-                    }
-                    if (url != null) {
-                        urls.add(url)
                     }
                 }
 
@@ -213,7 +193,6 @@ class AddMaterialActivity : BaseActivity() {
                     titulo = titulo,
                     descricao = descricao,
                     imagem_capa_url = imagemCapaUrl,
-                    tipo = tipoSelecionado,
                     categoria_id = categoriaSelecionada.id,
                     autor_id = autorId,
                     ficheiro_url = ficheiroUrlsConcatenadas,
@@ -223,6 +202,7 @@ class AddMaterialActivity : BaseActivity() {
                 materialViewModel.criarMaterial(novoMaterial)
             }
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -261,7 +241,6 @@ class AddMaterialActivity : BaseActivity() {
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
-        binding.spinnerTipo.setSelection(0)
         selectedUris = emptyList()
         binding.textViewFicheirosSelecionados.text = "Nenhum ficheiro selecionado"
         binding.checkBoxPrivado.isChecked = false

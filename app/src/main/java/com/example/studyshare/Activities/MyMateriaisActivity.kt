@@ -112,7 +112,6 @@ class MyMateriaisActivity : BaseActivity() {
             intent.putExtra("titulo", material.titulo)
             intent.putExtra("descricao", material.descricao)
             intent.putExtra("imagem_capa_url", material.imagem_capa_url)
-            intent.putExtra("tipo", material.tipo)
             intent.putExtra("ficheiro_url", material.ficheiro_url)
             intent.putExtra("privado", material.privado)
             // Se quiser passar a categoria, precisa garantir que tenha ela

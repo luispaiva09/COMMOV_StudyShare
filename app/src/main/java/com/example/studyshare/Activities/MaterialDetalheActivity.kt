@@ -68,14 +68,12 @@ class MaterialDetalheActivity : BaseActivity() {
         val titulo = intent.getStringExtra("titulo")
         val descricao = intent.getStringExtra("descricao")
         val imagemCapaUrl = intent.getStringExtra("imagem_capa_url")
-        val tipo = intent.getStringExtra("tipo")
         val ficheiroUrl = intent.getStringExtra("ficheiro_url")
         val privado = intent.getBooleanExtra("privado", false)
 
         // Seta dados na tela
         binding.tvTitulo.text = titulo
         binding.tvDescricao.text = descricao ?: "Sem descrição"
-        binding.tvTipo.text = "Tipo: ${tipo ?: "Não informado"}"
         binding.tvFicheiroUrl.text = "Arquivo: ${ficheiroUrl ?: "Não informado"}"
         binding.tvPrivado.text = "Privado: ${if (privado) "Sim" else "Não"}"
 
