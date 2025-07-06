@@ -1,8 +1,8 @@
 package com.example.studyshare.Activities
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -93,6 +93,10 @@ class SessaoEstudoDetalheActivity : BaseActivity() {
                 }
                 R.id.nav_categorias -> {
                     startActivity(Intent(this, AllCategoriasActivity::class.java))
+                    true
+                }
+                R.id.nav_pesquisar -> {
+                    startActivity(Intent(this, PesquisaActivity::class.java))
                     true
                 }
                 else -> false

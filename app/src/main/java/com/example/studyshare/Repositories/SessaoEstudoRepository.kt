@@ -10,7 +10,6 @@ class SessaoEstudoRepository(private val api: ApiService) {
     }
 
     suspend fun getSessaoById(id: Int): SessaoEstudo? {
-        // Corrigido para usar filtro "eq.<id>"
         val filtro = "eq.$id"
         val sessoes = api.getSessaoEstudoById(filtro)
         return sessoes.firstOrNull()

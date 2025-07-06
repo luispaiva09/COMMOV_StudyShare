@@ -97,6 +97,10 @@ class AddMaterialActivity : BaseActivity() {
                     startActivity(Intent(this, AllCategoriasActivity::class.java))
                     true
                 }
+                R.id.nav_pesquisar -> {
+                    startActivity(Intent(this, PesquisaActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

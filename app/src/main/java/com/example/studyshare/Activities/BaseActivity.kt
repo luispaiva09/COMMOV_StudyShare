@@ -4,9 +4,9 @@ import android.content.Intent
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.example.studyshare.R
 import com.google.android.material.navigation.NavigationView
 
@@ -65,6 +65,10 @@ open class BaseActivity : AppCompatActivity() {
                 }
                 R.id.nav_categorias -> {
                     startActivity(Intent(this, AllCategoriasActivity::class.java))
+                    true
+                }
+                R.id.nav_pesquisar -> {
+                    startActivity(Intent(this, PesquisaActivity::class.java))
                     true
                 }
                 else -> false

@@ -103,6 +103,10 @@
             android:name=".Activities.AlterarPasswordActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.PesquisaActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
