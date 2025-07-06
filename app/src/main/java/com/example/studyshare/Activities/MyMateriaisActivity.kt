@@ -74,6 +74,10 @@ class MyMateriaisActivity : BaseActivity() {
                     startActivity(Intent(this, MySessoesEstudoActivity::class.java))
                     true
                 }
+                R.id.nav_categorias -> {
+                    startActivity(Intent(this, AllCategoriasActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

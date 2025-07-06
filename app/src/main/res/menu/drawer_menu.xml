@@ -17,14 +17,14 @@
             android:id="@+id/nav_materiais"
             android:title="Os meus Materiais" />
         <item
+            android:id="@+id/nav_categorias"
+            android:title="Categorias" />
+        <item
             android:id="@+id/nav_favoritos"
             android:title="Favoritos" />
         <item
             android:id="@+id/nav_estatisticas"
             android:title="Estatísticas" />
-        <item
-            android:id="@+id/nav_categorias"
-            android:title="Categorias" />
         <item
             android:id="@+id/nav_sobre"
             android:title="Sobre" />

@@ -81,6 +81,10 @@
             android:name=".Activities.SessaoEstudoDetalheActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.AllCategoriasActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

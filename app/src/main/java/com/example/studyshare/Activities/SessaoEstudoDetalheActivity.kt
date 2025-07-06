@@ -16,7 +16,6 @@ import com.example.studyshare.ViewModels.SessaoEstudoViewModel
 import com.example.studyshare.databinding.ActivitySessaoEstudoDetalheBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.Lifecycle
 
@@ -81,6 +80,10 @@ class SessaoEstudoDetalheActivity : BaseActivity() {
                 }
                 R.id.nav_sessoes -> {
                     startActivity(Intent(this, MySessoesEstudoActivity::class.java))
+                    true
+                }
+                R.id.nav_categorias -> {
+                    startActivity(Intent(this, AllCategoriasActivity::class.java))
                     true
                 }
                 else -> false

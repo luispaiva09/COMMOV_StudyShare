@@ -6,38 +6,41 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.studyshare.DataClasses.Categoria
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.studyshare.Adapters.CategoriaAdapter
 import com.example.studyshare.R
 import com.example.studyshare.Repositories.CategoriaRepository
 import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.CategoriaViewModelFactory
 import com.example.studyshare.ViewModels.CategoriaViewModel
-import com.example.studyshare.databinding.ActivityAddCategoriaBinding
+import com.example.studyshare.databinding.ActivityAllCategoriasBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class AddCategoriaActivity : BaseActivity() {
+class AllCategoriasActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityAddCategoriaBinding
+    private lateinit var binding: ActivityAllCategoriasBinding
 
     private val repository = CategoriaRepository(RetrofitClient.api)
     private val viewModel: CategoriaViewModel by viewModels { CategoriaViewModelFactory(repository) }
 
+    private lateinit var adapter: CategoriaAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddCategoriaBinding.inflate(layoutInflater)
+        binding = ActivityAllCategoriasBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Setup do cabeçalho
         setupHeader(
             headerLayout = binding.headerLayout.root,
-            drawerLayout = binding.drawerLayoutAddCategoria
+            drawerLayout = binding.drawerLayoutAllCategorias
         )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
 
         // Setup do Navigation Drawer
-        binding.navigationViewAddCategoria.setNavigationItemSelectedListener { menuItem ->
+        binding.navigationViewAllCategorias.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
                     val editor = sharedPref.edit()
@@ -71,45 +74,28 @@ class AddCategoriaActivity : BaseActivity() {
             }
         }
 
-        // Observa criação de categoria
+        // Configurar RecyclerView
+        adapter = CategoriaAdapter()
+        binding.recyclerViewCategorias.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewCategorias.adapter = adapter
+
+        // Observar categorias
         lifecycleScope.launch {
-            viewModel.categoriaCriada.collectLatest { sucesso ->
-                sucesso?.let {
-                    if (it) {
-                        Toast.makeText(this@AddCategoriaActivity, "Categoria criada com sucesso!", Toast.LENGTH_LONG).show()
-                        limparCampos()
-                        startActivity(Intent(this@AddCategoriaActivity, InicioActivity::class.java))
-                        finish()
-                    }
-                }
+            viewModel.categorias.collectLatest { categorias ->
+                adapter.submitList(categorias)
             }
         }
 
-        // Observa erros
+        // Observar erros
         lifecycleScope.launch {
             viewModel.erroMensagem.collectLatest { erro ->
                 erro?.let {
-                    Toast.makeText(this@AddCategoriaActivity, "Erro: $it", Toast.LENGTH_LONG).show()
-                    Log.e("AddCategoriaActivity", "Erro ao criar categoria", Throwable(it))
+                    Toast.makeText(this@AllCategoriasActivity, "Erro: $it", Toast.LENGTH_LONG).show()
+                    Log.e("AllCategoriasActivity", "Erro ao carregar categorias", Throwable(it))
                 }
             }
         }
 
-        binding.btnAdicionarCategoria.setOnClickListener {
-            val nome = binding.etNomeCategoria.text.toString().trim()
-
-            if (nome.isEmpty()) {
-                Toast.makeText(this, "Por favor, insira o nome da categoria!", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-
-            val novaCategoria = Categoria(nome = nome)
-            viewModel.criarCategoria(novaCategoria)
-        }
-    }
-
-    private fun limparCampos() {
-        binding.etNomeCategoria.text?.clear()
-        viewModel.resetErro()
+        viewModel.carregarCategorias()
     }
 }
