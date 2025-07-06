@@ -19,9 +19,12 @@ import com.example.studyshare.ViewModelFactories.MaterialDidaticoViewModelFactor
 import com.example.studyshare.ViewModels.CategoriaViewModel
 import com.example.studyshare.ViewModels.MaterialDidaticoViewModel
 import com.example.studyshare.databinding.ActivityAddMaterialBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -148,7 +151,10 @@ class AddMaterialActivity : BaseActivity() {
                 var imagemCapaUrl: String? = null
 
                 if (imageUri != null) {
-                    imagemCapaUrl = uploadImagemParaSupabase(imageUri!!)
+                    imagemCapaUrl = withContext(Dispatchers.IO) {
+                        uploadImagemParaSupabase(imageUri!!)
+                    }
+                    Log.d("UploadImagem", "URL da imagem após upload: $imagemCapaUrl")
                 }
 
                 val novoMaterial = MaterialDidatico(
@@ -175,33 +181,6 @@ class AddMaterialActivity : BaseActivity() {
         }
     }
 
-    private suspend fun uploadImagemParaSupabase(uri: Uri): String? {
-        val contentResolver = contentResolver
-        val inputStream = contentResolver.openInputStream(uri) ?: return null
-        val bytes = inputStream.readBytes()
-        inputStream.close()
-
-        val fileName = "capa_${System.currentTimeMillis()}.jpg"
-
-        val request = Request.Builder()
-            .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-capa/$fileName")
-            .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
-            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
-            .addHeader("Content-Type", "image/jpeg")
-            .put(bytes.toRequestBody("image/jpeg".toMediaType()))
-            .build()
-
-        val client = OkHttpClient()
-        val response = client.newCall(request).execute()
-
-        return if (response.isSuccessful) {
-            "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-capa/$fileName"
-        } else {
-            Log.e("UploadImagem", "Erro: ${response.code}: ${response.message}")
-            null
-        }
-    }
-
     private fun limparCampos() {
         binding.etTitulo.text?.clear()
         binding.etDescricao.text?.clear()
@@ -213,4 +192,43 @@ class AddMaterialActivity : BaseActivity() {
         materialViewModel.resetErro()
     }
 
+    private fun uploadImagemParaSupabase(uri: Uri): String? {
+        return try {
+            val contentResolver = contentResolver
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
+            val bytes = inputStream.readBytes()
+            inputStream.close()
+
+            val fileName = "capa_${System.currentTimeMillis()}.jpg"
+
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "file",
+                    fileName,
+                    bytes.toRequestBody("image/jpeg".toMediaType())
+                )
+                .build()
+
+            val request = Request.Builder()
+                .url("https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-capa/$fileName")
+                .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
+                .post(requestBody)
+                .build()
+
+            val client = OkHttpClient()
+            val response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-capa/$fileName"
+            } else {
+                Log.e("UploadImagem", "Erro: ${response.code}: ${response.message}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("UploadImagem", "Erro na exceção: ${e.message}")
+            null
+        }
+    }
 }
