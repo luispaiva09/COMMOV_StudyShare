@@ -87,6 +87,71 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"/>
 
+                <!-- Comentários Label -->
+                <TextView
+                    android:id="@+id/tvComentariosLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comentários:"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"
+                    android:textSize="16sp" />
+
+                <!-- RecyclerView Comentários -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Form para criar comentário -->
+                <EditText
+                    android:id="@+id/etMensagemComentario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Escreva seu comentário"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:maxLines="4"
+                    android:padding="8dp"
+                    android:layout_marginTop="12dp"/>
+
+                <!-- Avaliação -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Avaliação:"
+                        android:textSize="16sp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <RatingBar
+                        android:id="@+id/ratingBarComentario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="0.5"
+                        android:rating="0"/>
+
+                </LinearLayout>
+
+                <!-- Botão enviar comentário -->
+                <Button
+                    android:id="@+id/btnEnviarComentario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enviar comentário"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"/>
+
+
                 <!-- Botão de voltar -->
                 <Button
                     android:id="@+id/btnVoltar"

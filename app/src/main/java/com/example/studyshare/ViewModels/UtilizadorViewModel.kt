@@ -26,6 +26,9 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
     private val _updateSucesso = MutableStateFlow<Boolean?>(null)
     val updateSucesso: StateFlow<Boolean?> = _updateSucesso
 
+    private val _utilizadores = MutableStateFlow<List<Utilizador>>(emptyList())
+    val utilizadores: StateFlow<List<Utilizador>> = _utilizadores
+
     fun registarUtilizador(utilizador: Utilizador) {
         viewModelScope.launch {
             try {
@@ -88,6 +91,18 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
             } catch (e: Exception) {
                 _utilizadorPerfil.value = null
                 _erroMensagem.value = e.message ?: "Erro ao carregar utilizador."
+            }
+        }
+    }
+
+    fun getUtilizadores() {
+        viewModelScope.launch {
+            try {
+                val lista = repository.getUtilizadores()
+                _utilizadores.value = lista
+                _erroMensagem.value = null
+            } catch (e: Exception) {
+                _erroMensagem.value = e.message ?: "Erro ao carregar utilizadores."
             }
         }
     }
