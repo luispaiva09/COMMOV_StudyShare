@@ -187,6 +187,11 @@ interface ApiService {
     @DELETE("sessoesestudo")
     suspend fun deleteSessaoEstudo(@Query("id") id: String): Response<Unit>
 
+    @GET("sessoesestudo")
+    suspend fun getSessoesEstudoByCriador(
+        @Query("criador_id") filtro: String
+    ): List<SessaoEstudo>
+
 
     // PARTICIPANTES SESSAO
 

@@ -64,6 +64,10 @@ class AddSessaoEstudoActivity : BaseActivity() {
                     startActivity(Intent(this, MyDiscussoesActivity::class.java))
                     true
                 }
+                R.id.nav_sessoes -> {
+                    startActivity(Intent(this, MySessoesEstudoActivity::class.java))
+                    true
+                }
 
                 else -> false
             }
@@ -93,13 +97,14 @@ class AddSessaoEstudoActivity : BaseActivity() {
             val titulo = binding.etTituloSessao.text.toString().trim()
             val descricao = binding.etDescricaoSessao.text.toString().trim().ifEmpty { null }
             val dataHora = binding.etDataHoraSessao.text.toString().trim()
-            val estadoSessao = binding.etEstadoSessao.text.toString().trim()
-            val videochamadaUrl = binding.etVideochamadaUrlSessao.text.toString().trim().ifEmpty { null }
 
-            if (titulo.isEmpty() || dataHora.isEmpty() || estadoSessao.isEmpty() || criadorId == -1) {
+            if (titulo.isEmpty() || dataHora.isEmpty() || criadorId == -1) {
                 Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            val estadoSessao = "planeada"
+            val nomeSalaVideo: String? = null
 
             val novaSessao = SessaoEstudo(
                 titulo = titulo,
@@ -107,7 +112,7 @@ class AddSessaoEstudoActivity : BaseActivity() {
                 data_hora = dataHora,
                 criador_id = criadorId,
                 estado_sessao = estadoSessao,
-                videochamada_url = videochamadaUrl
+                videochamada_url = nomeSalaVideo
             )
 
             lifecycleScope.launch {
@@ -120,8 +125,6 @@ class AddSessaoEstudoActivity : BaseActivity() {
         binding.etTituloSessao.text?.clear()
         binding.etDescricaoSessao.text?.clear()
         binding.etDataHoraSessao.text?.clear()
-        binding.etEstadoSessao.text?.clear()
-        binding.etVideochamadaUrlSessao.text?.clear()
         sessaoViewModel.resetErro()
     }
 }

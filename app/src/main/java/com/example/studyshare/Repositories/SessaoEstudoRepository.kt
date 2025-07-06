@@ -28,4 +28,8 @@ class SessaoEstudoRepository(private val api: ApiService) {
         return api.deleteSessaoEstudo("eq.$id")
     }
 
+    suspend fun getSessoesByCriador(criadorId: Int): List<SessaoEstudo> {
+        return api.getSessoesEstudoByCriador("eq.$criadorId")
+    }
+
 }

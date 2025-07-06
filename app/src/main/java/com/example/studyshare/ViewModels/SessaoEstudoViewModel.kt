@@ -22,6 +22,9 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
     private val _sessaoCriada = MutableStateFlow<Boolean?>(null)
     val sessaoCriada: StateFlow<Boolean?> = _sessaoCriada
 
+    private val _sessaoDetalhe = MutableStateFlow<SessaoEstudo?>(null)
+    val sessaoDetalhe: StateFlow<SessaoEstudo?> = _sessaoDetalhe
+
     fun carregarSessoes() {
         viewModelScope.launch {
             try {
@@ -32,12 +35,16 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
         }
     }
 
-    fun carregarSessaoPorId(id: Int) {
+    fun carregarSessaoById(id: Int) {
         viewModelScope.launch {
             try {
-                _sessaoSelecionada.value = repository.getSessaoById(id)
+                val sessao = repository.getSessaoById(id)
+                _sessaoDetalhe.value = sessao
+                if (sessao == null) {
+                    _erroMensagem.value = "Sessão não encontrada"
+                }
             } catch (e: Exception) {
-                _erroMensagem.value = "Erro ao carregar sessão: ${e.message}"
+                _erroMensagem.value = e.message ?: "Erro desconhecido"
             }
         }
     }
@@ -76,6 +83,17 @@ class SessaoEstudoViewModel(private val repository: SessaoEstudoRepository) : Vi
             }
         }
     }
+
+    fun carregarSessoesByCriador(criadorId: Int) {
+        viewModelScope.launch {
+            try {
+                _sessoes.value = repository.getSessoesByCriador(criadorId)
+            } catch (e: Exception) {
+                _erroMensagem.value = "Erro ao carregar sessões: ${e.message}"
+            }
+        }
+    }
+
 
     fun resetErro() {
         _erroMensagem.value = null

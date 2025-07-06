@@ -38,8 +38,10 @@
                 <EditText
                     android:id="@+id/etDescricaoSessao"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:hint="Descrição (opcional)"
+                    android:minLines="3"
+                    android:gravity="top|start"
                     android:inputType="textMultiLine" />
 
                 <EditText
@@ -48,20 +50,6 @@
                     android:layout_height="48dp"
                     android:hint="Data e Hora (YYYY-MM-DD HH:MM)"
                     android:inputType="datetime" />
-
-                <EditText
-                    android:id="@+id/etEstadoSessao"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:hint="Estado da Sessão"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/etVideochamadaUrlSessao"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:hint="URL da Videochamada (opcional)"
-                    android:inputType="textUri" />
 
                 <Button
                     android:id="@+id/buttonSubmeterSessao"

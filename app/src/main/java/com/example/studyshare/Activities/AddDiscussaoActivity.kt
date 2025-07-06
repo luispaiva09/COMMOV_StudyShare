@@ -71,6 +71,10 @@ class AddDiscussaoActivity : BaseActivity() {
                     startActivity(Intent(this, MyDiscussoesActivity::class.java))
                     true
                 }
+                R.id.nav_sessoes -> {
+                    startActivity(Intent(this, MySessoesEstudoActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

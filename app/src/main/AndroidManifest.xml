@@ -73,6 +73,14 @@
             android:name=".Activities.AddSessaoEstudoActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.MySessoesEstudoActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".Activities.SessaoEstudoDetalheActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
