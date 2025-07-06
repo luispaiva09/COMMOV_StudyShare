@@ -1,6 +1,5 @@
 package com.example.studyshare
 
-import com.example.studyshare.DataClasses.Avaliacao
 import com.example.studyshare.DataClasses.Categoria
 import com.example.studyshare.DataClasses.Comentario
 import com.example.studyshare.DataClasses.Discussao
@@ -97,26 +96,6 @@ interface ApiService {
 
     @DELETE("categorias")
     suspend fun deleteCategoria(@Query("id") id: String): Response<Unit>
-
-
-    // AVALIACOES
-
-    @GET("avaliacoes")
-    suspend fun getAvaliacoes(): List<Avaliacao>
-
-    @GET("avaliacoes")
-    suspend fun getAvaliacaoById(@Query("id") id: String): List<Avaliacao>
-
-    @Headers("Prefer: return=representation")
-    @POST("avaliacoes")
-    suspend fun createAvaliacao(@Body avaliacao: Avaliacao): List<Avaliacao>
-
-    @PUT("avaliacoes")
-    suspend fun updateAvaliacao(@Query("id") id: String, @Body avaliacao: Avaliacao): List<Avaliacao>
-
-    @DELETE("avaliacoes")
-    suspend fun deleteAvaliacao(@Query("id") id: String): Response<Unit>
-
 
     // COMENTARIOS
 

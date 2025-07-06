@@ -54,14 +54,6 @@
                     android:paddingTop="16dp"
                     android:textSize="16sp" />
 
-                <!-- URL do ficheiro -->
-                <TextView
-                    android:id="@+id/tvFicheiroUrl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="12dp"
-                    android:textSize="16sp" />
-
                 <!-- Privado -->
                 <TextView
                     android:id="@+id/tvPrivado"
@@ -69,6 +61,31 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
                     android:textSize="16sp" />
+
+                <!-- Lista de Ficheiros -->
+                <TextView
+                    android:id="@+id/tvFicheirosLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ficheiros:"
+                    android:textStyle="bold"
+                    android:paddingTop="12dp"
+                    android:textSize="16sp" />
+
+                <!-- Botão Expandir/Recolher -->
+                <Button
+                    android:id="@+id/btnExpandirFicheiros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ver ficheiros"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewFicheiros"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"/>
 
                 <!-- Botão de voltar -->
                 <Button

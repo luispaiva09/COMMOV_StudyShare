@@ -5,5 +5,6 @@ data class Comentario(
     val material_id: Int,
     val autor_id: Int,
     val mensagem: String,
-    val data: String? = null
+    val data: String? = null,
+    val avaliacao_pontos: Float? = null
 )

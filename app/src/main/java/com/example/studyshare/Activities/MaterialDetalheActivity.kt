@@ -2,14 +2,18 @@ package com.example.studyshare.Activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.studyshare.Adapters.FicheiroAdapter
 import com.example.studyshare.R
 import com.example.studyshare.databinding.ActivityMaterialDetalheBinding
 
 class MaterialDetalheActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMaterialDetalheBinding
+    private var isExpanded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,17 +68,15 @@ class MaterialDetalheActivity : BaseActivity() {
             }
         }
 
-        // Recupera dados passados pela Intent
+        // Dados da Intent
         val titulo = intent.getStringExtra("titulo")
         val descricao = intent.getStringExtra("descricao")
         val imagemCapaUrl = intent.getStringExtra("imagem_capa_url")
         val ficheiroUrl = intent.getStringExtra("ficheiro_url")
         val privado = intent.getBooleanExtra("privado", false)
 
-        // Seta dados na tela
         binding.tvTitulo.text = titulo
         binding.tvDescricao.text = descricao ?: "Sem descrição"
-        binding.tvFicheiroUrl.text = "Arquivo: ${ficheiroUrl ?: "Não informado"}"
         binding.tvPrivado.text = "Privado: ${if (privado) "Sim" else "Não"}"
 
         if (!imagemCapaUrl.isNullOrEmpty()) {
@@ -85,7 +87,28 @@ class MaterialDetalheActivity : BaseActivity() {
             binding.ivImagemCapa.setImageResource(android.R.color.darker_gray)
         }
 
-        // Botão de voltar (opcional)
+        val ficheiroUrls = ficheiroUrl?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
+
+        val ficheiroAdapter = FicheiroAdapter(this, ficheiroUrls)
+        binding.recyclerViewFicheiros.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewFicheiros.adapter = ficheiroAdapter
+
+        // Inicia fechado
+        binding.recyclerViewFicheiros.visibility = View.GONE
+
+        // Botão expandir/recolher
+        binding.btnExpandirFicheiros.setOnClickListener {
+            isExpanded = !isExpanded
+            if (isExpanded) {
+                binding.recyclerViewFicheiros.visibility = View.VISIBLE
+                binding.btnExpandirFicheiros.text = "Recolher ficheiros"
+            } else {
+                binding.recyclerViewFicheiros.visibility = View.GONE
+                binding.btnExpandirFicheiros.text = "Ver ficheiros (${ficheiroUrls.size})"
+            }
+        }
+
+        // Botão voltar
         binding.btnVoltar.setOnClickListener {
             finish()
         }

@@ -224,7 +224,6 @@ class AddMaterialActivity : BaseActivity() {
 
             selectedUris = uriList
 
-            // Atualizar TextView para mostrar os nomes dos ficheiros selecionados
             val nomesFicheiros = selectedUris.mapNotNull { uri ->
                 uri.lastPathSegment?.substringAfterLast('/')
             }
