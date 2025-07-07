@@ -33,14 +33,18 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
     fun registarUtilizador(utilizador: Utilizador) {
         viewModelScope.launch {
             try {
+                repository.registarUtilizador(utilizador)
+                _registoSucesso.value = true
+                _erroMensagem.value = null
                 val usernameExiste = repository.verificarUsername(utilizador.username)
+                val emailExiste = repository.verificarEmail(utilizador.email)
+
                 if (usernameExiste) {
                     _registoSucesso.value = false
                     _erroMensagem.value = "Username já existe."
                     return@launch
                 }
 
-                val emailExiste = repository.verificarEmail(utilizador.email)
                 if (emailExiste) {
                     _registoSucesso.value = false
                     _erroMensagem.value = "Email já existe."
@@ -48,6 +52,7 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
                 }
 
                 val response = repository.registarUtilizador(utilizador)
+
                 if (response.isSuccessful) {
                     _registoSucesso.value = true
                     _erroMensagem.value = null
@@ -55,6 +60,7 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
                     _registoSucesso.value = false
                     _erroMensagem.value = "Falha ao registar utilizador."
                 }
+
             } catch (e: Exception) {
                 _registoSucesso.value = false
                 _erroMensagem.value = e.message ?: "Erro desconhecido"

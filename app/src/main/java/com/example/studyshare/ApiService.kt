@@ -40,7 +40,7 @@ interface ApiService {
     suspend fun getUtilizadores(): List<Utilizador>
 
     @GET("utilizadores")
-    suspend fun getUtilizadorById(@Query("id") id: String = "eq.{id}"): List<Utilizador>
+    suspend fun getUtilizadorById(@Query("id") idFilter: String): List<Utilizador>
 
     @POST("utilizadores")
     suspend fun createUtilizador(@Body utilizador: Utilizador): Response<Unit>

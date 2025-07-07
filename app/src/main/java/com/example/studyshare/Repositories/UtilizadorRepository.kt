@@ -4,11 +4,14 @@ import com.example.studyshare.ApiService
 import com.example.studyshare.DataClasses.Utilizador
 import com.example.studyshare.LoginRequest
 import com.example.studyshare.LoginResponse
+import retrofit2.Response
+
 
 class UtilizadorRepository(private val api: ApiService) {
 
-    suspend fun registarUtilizador(utilizador: Utilizador) =
-        api.createUtilizador(utilizador)
+    suspend fun registarUtilizador(utilizador: Utilizador): Response<Unit> {
+        return api.createUtilizador(utilizador)
+    }
 
     suspend fun verificarUsername(username: String): Boolean {
         val resultado = api.verificarUsernameExistente(username)
