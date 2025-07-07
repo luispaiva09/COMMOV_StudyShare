@@ -77,12 +77,25 @@ class DiscussaoViewModel(private val repository: DiscussaoRepository) : ViewMode
         }
     }
 
+
     fun carregarDiscussoesByCriador(criadorId: Int) {
         viewModelScope.launch {
             try {
-                _discussoes.value = repository.getDiscussoesByCriador(criadorId)
+                val discussoesDoCriador = repository.getDiscussoesByCriador(criadorId)
+                _discussoes.value = discussoesDoCriador
             } catch (e: Exception) {
-                _erroMensagem.value = "Erro ao carregar discussões: ${e.message}"
+                _erroMensagem.value = e.message ?: "Erro desconhecido"
+            }
+        }
+    }
+
+    fun carregarUltimasDiscussoes() {
+        viewModelScope.launch {
+            try {
+                val ultimasDiscussoes = repository.getDiscussoes() // busca lista geral de discussões
+                _discussoes.value = ultimasDiscussoes
+            } catch (e: Exception) {
+                _erroMensagem.value = e.message ?: "Erro desconhecido"
             }
         }
     }

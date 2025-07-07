@@ -16,15 +16,13 @@
             android:id="@+id/headerLayoutInicio"
             layout="@layout/header" />
 
-        <!-- Restante conteúdo dentro de ScrollView -->
+        <!-- ScrollView para conteúdo -->
         <ScrollView
-            android:id="@+id/scrollViewInicio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="32dp">
 
             <LinearLayout
-                android:id="@+id/inicioLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -40,6 +38,38 @@
                     android:textColor="@android:color/black"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="32dp" />
+
+                <!-- Título materiais -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Últimos Materiais Criados"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvUltimosMateriais"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Título discussões -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Últimas Discussões Criadas"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvUltimasDiscussoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
         </ScrollView>
