@@ -31,4 +31,9 @@ class MaterialDidaticoRepository(private val api: ApiService) {
     suspend fun getMaterialByAutor(autor_id: Int): List<MaterialDidatico> {
         return api.getMateriaisByAutor("eq.$autor_id")
     }
+
+    suspend fun getUltimosMateriaisDoAutor(autorId: Int): List<MaterialDidatico> {
+        return api.getUltimosMateriaisDoAutor("eq.$autorId")
+    }
+
 }

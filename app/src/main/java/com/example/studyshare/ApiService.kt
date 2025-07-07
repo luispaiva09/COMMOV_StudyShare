@@ -61,10 +61,7 @@ interface ApiService {
 
     @PATCH("utilizadores")
     @Headers("Prefer: return=representation")
-    suspend fun updateUtilizadorParcial(
-        @Query("id") id: String = "",   // <- Aqui o valor precisa ser "eq.{id}"
-        @Body updates: Map<String, @JvmSuppressWildcards Any>
-    ): List<Utilizador>
+    suspend fun updateUtilizadorParcial(@Query("id") id: String = "", @Body updates: Map<String, @JvmSuppressWildcards Any>): List<Utilizador>
 
     // MATERIAIS DIDATICOS
 
@@ -78,6 +75,7 @@ interface ApiService {
     @POST("materiaisdidaticos")
     suspend fun createMaterialDidatico(@Body material: MaterialDidatico): List<MaterialDidatico>
 
+    @Headers("Prefer: return=representation")
     @PUT("materiaisdidaticos")
     suspend fun updateMaterialDidatico(@Query("id") id: String, @Body material: MaterialDidatico): List<MaterialDidatico>
 
@@ -86,6 +84,9 @@ interface ApiService {
 
     @GET("materiaisdidaticos")
     suspend fun getMateriaisByAutor(@Query("autor_id") autor_id: String ): List<MaterialDidatico>
+
+    @GET("materiaisdidaticos")
+    suspend fun getUltimosMateriaisDoAutor(@Query("autor_id") autorId: String, @Query("order") order: String = "data_criacao.desc", @Query("limit") limit: Int = 3): List<MaterialDidatico>
 
     // CATEGORIAS
 
@@ -99,6 +100,7 @@ interface ApiService {
     @POST("categorias")
     suspend fun createCategoria(@Body categoria: Categoria): List<Categoria>
 
+    @Headers("Prefer: return=representation")
     @PUT("categorias")
     suspend fun updateCategoria(@Query("id") id: String, @Body categoria: Categoria): List<Categoria>
 
@@ -117,6 +119,7 @@ interface ApiService {
     @POST("comentarios")
     suspend fun createComentario(@Body comentario: Comentario): List<Comentario>
 
+    @Headers("Prefer: return=representation")
     @PUT("comentarios")
     suspend fun updateComentario(@Query("id") id: String, @Body comentario: Comentario): List<Comentario>
 
@@ -149,10 +152,7 @@ interface ApiService {
     suspend fun getEstatisticaById(@Query("utilizador_id") utilizadorId: String): List<Estatistica>
 
     @PUT("estatisticas/{userId}")
-    suspend fun updateEstatistica(
-        @Path("userId") userId: Int,
-        @Body estatistica: Estatistica
-    ): Response<Unit>
+    suspend fun updateEstatistica(@Path("userId") userId: Int, @Body estatistica: Estatistica): Response<Unit>
 
     @POST("estatisticas")
     suspend fun createEstatistica(
@@ -171,6 +171,7 @@ interface ApiService {
     @POST("sessoesestudo")
     suspend fun createSessaoEstudo(@Body sessaoEstudo: SessaoEstudo): List<SessaoEstudo>
 
+    @Headers("Prefer: return=representation")
     @PUT("sessoesestudo")
     suspend fun updateSessaoEstudo(@Query("id") id: String, @Body sessaoEstudo: SessaoEstudo): List<SessaoEstudo>
 
@@ -211,6 +212,7 @@ interface ApiService {
     @POST("discussoes")
     suspend fun createDiscussao(@Body discussao: Discussao): List<Discussao>
 
+    @Headers("Prefer: return=representation")
     @PUT("discussoes")
     suspend fun updateDiscussao(@Query("id") id: String, @Body discussao: Discussao): List<Discussao>
 
@@ -219,6 +221,9 @@ interface ApiService {
 
     @GET("discussoes")
     suspend fun getDiscussoesByCriador(@Query("criador_id") criadorId: String): List<Discussao>
+
+    @GET("discussoes")
+    suspend fun getUltimasDiscussoesDoCriador(@Query("criador_id") criadorId: String, @Query("order") order: String = "data_criacao.desc", @Query("limit") limit: Int = 3): List<Discussao>
 
 
     // MENSAGENS DISCUSSAO
@@ -233,6 +238,7 @@ interface ApiService {
     @POST("mensagensdiscussao")
     suspend fun createMensagemDiscussao(@Body mensagemDiscussao: MensagemDiscussao): List<MensagemDiscussao>
 
+    @Headers("Prefer: return=representation")
     @PUT("mensagensdiscussao")
     suspend fun updateMensagemDiscussao(@Query("id") id: String, @Body mensagemDiscussao: MensagemDiscussao): List<MensagemDiscussao>
 

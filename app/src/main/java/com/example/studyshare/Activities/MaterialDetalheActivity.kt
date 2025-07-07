@@ -17,8 +17,8 @@ import com.example.studyshare.Repositories.ComentarioRepository
 import com.example.studyshare.Repositories.UtilizadorRepository
 import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.ComentarioViewModelFactory
-import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModelFactories.EstatisticaViewModelFactory
+import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
 import com.example.studyshare.ViewModels.ComentarioViewModel
 import com.example.studyshare.ViewModels.EstatisticaViewModel
 import com.example.studyshare.ViewModels.UtilizadorViewModel
@@ -50,7 +50,7 @@ class MaterialDetalheActivity : BaseActivity() {
         )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-        val userId = sharedPref.getInt("userId", -1)  // <-- Aqui renomeado
+        val userId = sharedPref.getInt("userId", -1)
 
         if (userId == -1) {
             Toast.makeText(this, "Erro: usuário não autenticado!", Toast.LENGTH_SHORT).show()
@@ -146,7 +146,6 @@ class MaterialDetalheActivity : BaseActivity() {
             finish()
         }
 
-        // Inicializar Repositórios e ViewModels
         val comentarioRepository = ComentarioRepository(RetrofitClient.api)
         comentarioViewModel = ViewModelProvider(this, ComentarioViewModelFactory(comentarioRepository))
             .get(ComentarioViewModel::class.java)
@@ -161,16 +160,17 @@ class MaterialDetalheActivity : BaseActivity() {
 
         utilizadorViewModel.getUtilizadores()
 
+        comentarioViewModel.carregarComentarios()
+
         binding.recyclerViewComentarios.layoutManager = LinearLayoutManager(this)
 
         lifecycleScope.launch {
             repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 launch {
                     utilizadorViewModel.utilizadores.collectLatest { listaUtilizadores ->
-                        val utilizadorMap: Map<Int, com.example.studyshare.DataClasses.Utilizador> =
-                            listaUtilizadores
-                                .filter { it.id != null }
-                                .associateBy { it.id!! }
+                        val utilizadorMap = listaUtilizadores
+                            .filter { it.id != null }
+                            .associateBy { it.id!! }
 
                         comentarioAdapter = ComentarioAdapter(emptyList(), utilizadorMap)
                         binding.recyclerViewComentarios.adapter = comentarioAdapter
@@ -208,17 +208,16 @@ class MaterialDetalheActivity : BaseActivity() {
             val novoComentario = Comentario(
                 id = null,
                 material_id = materialId,
-                autor_id = userId, // usa a variável userId
+                autor_id = userId,
                 mensagem = mensagem,
                 data = dataAtual,
                 avaliacao_pontos = if (avaliacao > 0f) avaliacao else null
             )
 
             comentarioViewModel.criarComentario(novoComentario)
-
             estatisticaViewModel.incrementarComentariosFeitos(userId)
 
-            // Limpar inputs
+            // Limpar
             binding.etMensagemComentario.text.clear()
             binding.ratingBarComentario.rating = 0f
         }

@@ -88,13 +88,13 @@ class MaterialDidaticoViewModel(private val repository: MaterialDidaticoReposito
         }
     }
 
-    fun carregarUltimosMateriais() {
+    fun carregarUltimosMateriaisDoAutor(autorId: Int) {
         viewModelScope.launch {
             try {
-                val ultimosMateriais = repository.getMateriais() // seu getMateriais() já busca a lista geral
-                _materiais.value = ultimosMateriais
+                val materiaisDoAutor = repository.getUltimosMateriaisDoAutor(autorId)
+                _materiais.value = materiaisDoAutor
             } catch (e: Exception) {
-                _erroMensagem.value = e.message ?: "Erro desconhecido"
+                _erroMensagem.value = e.message
             }
         }
     }

@@ -9,6 +9,7 @@ data class MaterialDidatico(
     val data_criacao: String? = null,
     val privado: Boolean? = false,
     val ficheiro_url: String,
-    val imagem_capa_url: String? = null
+    val imagem_capa_url: String? = null,
+    val favorito: Boolean? = false
 )
 

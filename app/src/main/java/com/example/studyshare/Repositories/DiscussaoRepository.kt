@@ -31,4 +31,9 @@ class DiscussaoRepository(private val api: ApiService) {
     suspend fun getDiscussoesByCriador(criadorId: Int): List<Discussao> {
         return api.getDiscussoesByCriador("eq.$criadorId")
     }
+
+    suspend fun getUltimasDiscussoesDoCriador(criadorId: Int): List<Discussao> {
+        return api.getUltimasDiscussoesDoCriador("eq.$criadorId")
+    }
+
 }

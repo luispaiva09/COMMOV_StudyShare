@@ -100,6 +100,17 @@ class DiscussaoViewModel(private val repository: DiscussaoRepository) : ViewMode
         }
     }
 
+    fun carregarUltimasDiscussoesDoCriador(criadorId: Int) {
+        viewModelScope.launch {
+            try {
+                val discussoesDoCriador = repository.getUltimasDiscussoesDoCriador(criadorId)
+                _discussoes.value = discussoesDoCriador
+            } catch (e: Exception) {
+                _erroMensagem.value = e.message
+            }
+        }
+    }
+
     fun resetErro() {
         _erroMensagem.value = null
     }
