@@ -177,20 +177,6 @@ class UtilizadorViewModel(private val repository: UtilizadorRepository) : ViewMo
         }
     }
 
-    // Alterar password
-    suspend fun alterarPassword(id: Int, oldPassword: String, newPassword: String): Boolean {
-        return try {
-            val utilizador = repository.getUtilizadorById(id)
-            if (utilizador == null) return false
-            if (utilizador.password != oldPassword) {
-                false
-            } else {
-                repository.alterarPassword(id, oldPassword, newPassword)
-            }
-        } catch (e: Exception) {
-            false
-        }
-    }
 
     // Resetar estados
     fun resetEstado() {

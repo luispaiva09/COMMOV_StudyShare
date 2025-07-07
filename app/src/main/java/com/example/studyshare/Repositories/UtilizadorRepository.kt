@@ -22,6 +22,8 @@ class UtilizadorRepository(private val api: ApiService) {
 
     suspend fun loginUtilizador(username: String, password: String): LoginResponse? {
         val response = api.loginUtilizador(LoginRequest(p_username = username, p_password = password))
+        println("loginUtilizador response size: ${response.size}")
+        response.forEach { println(it) }
         return response.firstOrNull()
     }
 
@@ -34,7 +36,7 @@ class UtilizadorRepository(private val api: ApiService) {
     }
 
     suspend fun updateUtilizadorParcial(id: Int, updates: Map<String, Any>): Boolean {
-        val listaAtualizada = api.updateUtilizadorParcial(id.toString(), updates)
+        val listaAtualizada = api.updateUtilizadorParcial("eq.$id", updates)
         return listaAtualizada.isNotEmpty()
     }
 
@@ -53,20 +55,12 @@ class UtilizadorRepository(private val api: ApiService) {
         utilizador.ultimo_login?.let { updates["ultimo_login"] = it }
         utilizador.foto_perfil_url?.let { updates["foto_perfil_url"] = it }
 
-        val listaAtualizada = api.updateUtilizadorParcial(id.toString(), updates)
+        val listaAtualizada = api.updateUtilizadorParcial("eq.$id", updates)
         return listaAtualizada.isNotEmpty()
     }
 
     suspend fun deleteUtilizador(id: Int) =
         api.deleteUtilizador(id.toString())
 
-    suspend fun alterarPassword(id: Int, oldPassword: String, newPassword: String): Boolean {
-        val request = com.example.studyshare.AlterarPasswordRequest(
-            p_user_id = id,
-            p_old_password = oldPassword,
-            p_new_password = newPassword
-        )
-        val response = api.alterarPassword(request)
-        return response.isSuccessful
-    }
+
 }

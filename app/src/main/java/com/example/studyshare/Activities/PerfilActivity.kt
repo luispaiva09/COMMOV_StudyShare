@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.studyshare.R
@@ -32,42 +33,13 @@ class PerfilActivity : BaseActivity() {
     private val viewModel: UtilizadorViewModel by viewModels { UtilizadorViewModelFactory(repository) }
 
     private var selectedImageUri: Uri? = null
-    private var uploadedImageUrl: String? = null
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            selectedImageUri = result.data?.data
-            selectedImageUri?.let {
-                binding.imageViewPerfil.setImageURI(it)
-                Toast.makeText(this, "Foto de perfil selecionada.", Toast.LENGTH_SHORT).show()
-
-                lifecycleScope.launch {
-                    // Upload da imagem
-                    uploadedImageUrl = withContext(Dispatchers.IO) {
-                        uploadImagemParaSupabase(it)
-                    }
-
-                    if (uploadedImageUrl != null) {
-                        Toast.makeText(this@PerfilActivity, "Imagem carregada com sucesso!", Toast.LENGTH_SHORT).show()
-                        Log.d("PerfilActivity", "URL da imagem: $uploadedImageUrl")
-
-                        val utilizador = viewModel.utilizadorPerfil.value
-                        if (utilizador != null) {
-                            val atualizado = utilizador.copy(foto_perfil_url = uploadedImageUrl)
-                            utilizador.id?.let { id ->
-                                // Atualiza o utilizador no backend
-                                val dadosUpdate = mapOf("foto_perfil_url" to uploadedImageUrl!!)
-                                viewModel.updateUtilizadorParcial(id, dadosUpdate)
-
-                                // Aguarda um pouco para garantir que a atualização foi processada (ouça eventos no ViewModel para isso)
-                                // Aqui só uma chamada para recarregar
-                                viewModel.getUtilizadorById(id)
-                            }
-                        }
-                    } else {
-                        Toast.makeText(this@PerfilActivity, "Erro ao carregar imagem.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            result.data?.data?.let { uri ->
+                selectedImageUri = uri
+                binding.imageViewPerfil.setImageURI(uri)
+                uploadAndSaveProfileImage(uri)
             }
         }
     }
@@ -86,31 +58,23 @@ class PerfilActivity : BaseActivity() {
             viewModel.getUtilizadorById(userId)
         }
 
-        lifecycleScope.launch {
+        // Observers
+        lifecycleScope.launchWhenStarted {
             viewModel.utilizadorPerfil.collect { utilizador ->
-                utilizador?.let {
-                    binding.editTextNumero.setText(it.id.toString())
-                    binding.editTextUsername.setText(it.username ?: "")
-                    binding.editTextNome.setText(it.nome ?: "")
-                    binding.editTextTelefone.setText(it.n_telemovel?.toString() ?: "")
-                    binding.editTextEmail.setText(it.email ?: "")
-                    binding.editTextPassword.setText("********")
-
-                    binding.textViewNomePerfil.text = it.username ?: "Perfil"
-
-                    it.foto_perfil_url?.let { url ->
-                        Glide.with(this@PerfilActivity)
-                            .load(url)
-                            .into(binding.imageViewPerfil)
-                    }
-                }
+                utilizador?.let { updateUI(it) }
             }
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.erroMensagem.collect { erro ->
-                erro?.let {
-                    Toast.makeText(this@PerfilActivity, it, Toast.LENGTH_SHORT).show()
+                erro?.let { Toast.makeText(this@PerfilActivity, it, Toast.LENGTH_SHORT).show() }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.updateSucesso.collect { sucesso ->
+                sucesso?.let {
+                    if (it) Toast.makeText(this@PerfilActivity, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -124,72 +88,65 @@ class PerfilActivity : BaseActivity() {
             startActivity(Intent(this, EditarPerfilActivity::class.java))
         }
 
-        binding.buttonAlterarPassword.setOnClickListener {
-            startActivity(Intent(this, AlterarPasswordActivity::class.java))
-        }
-
         binding.navigationViewPerfil.setNavigationItemSelectedListener { menuItem ->
+            val drawer = binding.drawerLayoutPerfil
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
-                    val editor = sharedPref.edit()
-                    editor.clear()
-                    editor.apply()
+                    sharedPref.edit().clear().apply()
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
-                    true
                 }
-                R.id.nav_inicio -> {
-                    startActivity(Intent(this, InicioActivity::class.java))
-                    true
-                }
-                R.id.nav_materiais -> {
-                    startActivity(Intent(this, MyMateriaisActivity::class.java))
-                    true
-                }
-                R.id.nav_discussoes -> {
-                    startActivity(Intent(this, MyDiscussoesActivity::class.java))
-                    true
-                }
-                R.id.nav_sessoes -> {
-                    startActivity(Intent(this, MySessoesEstudoActivity::class.java))
-                    true
-                }
-                R.id.nav_categorias -> {
-                    startActivity(Intent(this, AllCategoriasActivity::class.java))
-                    true
-                }
-                R.id.nav_pesquisar -> {
-                    startActivity(Intent(this, PesquisaActivity::class.java))
-                    true
-                }
-                else -> false
+                R.id.nav_inicio -> startActivity(Intent(this, InicioActivity::class.java))
+                R.id.nav_materiais -> startActivity(Intent(this, MyMateriaisActivity::class.java))
+                R.id.nav_discussoes -> startActivity(Intent(this, MyDiscussoesActivity::class.java))
+                R.id.nav_sessoes -> startActivity(Intent(this, MySessoesEstudoActivity::class.java))
+                R.id.nav_categorias -> startActivity(Intent(this, AllCategoriasActivity::class.java))
+                R.id.nav_pesquisar -> startActivity(Intent(this, PesquisaActivity::class.java))
             }
+            drawer.closeDrawer(GravityCompat.START)
+            true
+        }
+    }
+
+    private fun updateUI(utilizador: com.example.studyshare.DataClasses.Utilizador) {
+        binding.editTextNumero.setText(utilizador.id.toString())
+        binding.editTextUsername.setText(utilizador.username ?: "")
+        binding.editTextNome.setText(utilizador.nome ?: "")
+        binding.editTextTelefone.setText(utilizador.n_telemovel?.toString() ?: "")
+        binding.editTextEmail.setText(utilizador.email ?: "")
+        binding.textViewNomePerfil.text = utilizador.username ?: "Perfil"
+
+        utilizador.foto_perfil_url?.let { url ->
+            Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.baseline_account_circle_24)
+                .into(binding.imageViewPerfil)
+        }
+    }
+
+    private fun uploadAndSaveProfileImage(uri: Uri) {
+        lifecycleScope.launch {
+            val imageUrl = withContext(Dispatchers.IO) { uploadImagemParaSupabase(uri) }
+
+            imageUrl?.let { url ->
+                viewModel.utilizadorPerfil.value?.id?.let { id ->
+                    viewModel.updateUtilizadorParcial(id, mapOf("foto_perfil_url" to url))
+                }
+            } ?: Toast.makeText(this@PerfilActivity, "Erro ao carregar imagem.", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun uploadImagemParaSupabase(uri: Uri): String? {
         return try {
-            val contentResolver = contentResolver
-            val inputStream = contentResolver.openInputStream(uri)
-            if (inputStream == null) {
-                Log.e("UploadImagem", "Não foi possível abrir InputStream do Uri")
-                return null
-            }
+            val inputStream = contentResolver.openInputStream(uri) ?: return null
             val bytes = inputStream.readBytes()
             inputStream.close()
 
             val fileName = "perfil_${System.currentTimeMillis()}.jpg"
-
-            val mediaType = "image/jpeg".toMediaTypeOrNull()
-            if (mediaType == null) {
-                Log.e("UploadImagem", "MediaType inválido")
-                return null
-            }
+            val mediaType = "image/jpeg".toMediaTypeOrNull() ?: return null
             val requestBody = bytes.toRequestBody(mediaType)
 
-            // Endpoint para upload (PUT) - URL do objeto no bucket "imagens-perfil"
             val url = "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/imagens-perfil/$fileName"
-
             val request = Request.Builder()
                 .url(url)
                 .addHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprdHd1cnpnbmFma3d4cWZ3bWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMTY4MDAsImV4cCI6MjA2Njc5MjgwMH0.ivWULQ1yq0B-I3rLqEsF7Xrfzr4lIKFOb5Q-PR-XIx0")
@@ -202,15 +159,13 @@ class PerfilActivity : BaseActivity() {
             val response = client.newCall(request).execute()
 
             if (response.isSuccessful) {
-                // URL pública para acessar imagem
                 "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/imagens-perfil/$fileName"
             } else {
-                val errorBody = response.body?.string()
-                Log.e("UploadImagem", "Erro no upload: Código ${response.code} - $errorBody")
+                Log.e("UploadImagem", "Erro: ${response.code} ${response.body?.string()}")
                 null
             }
         } catch (e: Exception) {
-            Log.e("UploadImagem", "Exceção durante upload: ${e.localizedMessage ?: e.message}")
+            Log.e("UploadImagem", "Exceção: ${e.localizedMessage}")
             null
         }
     }

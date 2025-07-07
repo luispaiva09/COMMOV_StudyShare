@@ -118,32 +118,6 @@
                     android:layout_marginBottom="24dp"
                     android:padding="12dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Login"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/editTextPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Palavra-passe"
-                    android:enabled="false"
-                    android:background="@android:drawable/edit_text"
-                    android:layout_marginBottom="8dp" />
-
-                <Button
-                    android:id="@+id/buttonAlterarPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Alterar Palavra-passe"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="32dp"
-                    android:padding="12dp" />
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

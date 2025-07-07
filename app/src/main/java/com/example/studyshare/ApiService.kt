@@ -31,11 +31,6 @@ data class LoginResponse(
     val email: String
 )
 
-data class AlterarPasswordRequest(
-    val p_user_id: Int,
-    val p_old_password: String,
-    val p_new_password: String
-)
 
 interface ApiService {
 
@@ -45,13 +40,10 @@ interface ApiService {
     suspend fun getUtilizadores(): List<Utilizador>
 
     @GET("utilizadores")
-    suspend fun getUtilizadorById(@Query("id") id: String): List<Utilizador>
+    suspend fun getUtilizadorById(@Query("id") id: String = "eq.{id}"): List<Utilizador>
 
     @POST("utilizadores")
     suspend fun createUtilizador(@Body utilizador: Utilizador): Response<Unit>
-
-    @PUT("utilizadores")
-    suspend fun updateUtilizador(@Query("id") id: String, @Body utilizador: Utilizador): List<Utilizador>
 
     @DELETE("utilizadores")
     suspend fun deleteUtilizador(@Query("id") id: String): Response<Unit>
@@ -65,13 +57,11 @@ interface ApiService {
     @POST("rpc/login_utilizador")
     suspend fun loginUtilizador(@Body loginRequest: LoginRequest): List<LoginResponse>
 
-    @POST("rpc/alterar_password")
-    suspend fun alterarPassword(@Body body: AlterarPasswordRequest): Response<Unit>
 
-    @Headers("Prefer: return=representation")
     @PATCH("utilizadores")
+    @Headers("Prefer: return=representation")
     suspend fun updateUtilizadorParcial(
-        @Query("id") id: String,
+        @Query("id") id: String = "",   // <- Aqui o valor precisa ser "eq.{id}"
         @Body updates: Map<String, @JvmSuppressWildcards Any>
     ): List<Utilizador>
 
