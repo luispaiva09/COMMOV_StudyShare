@@ -107,6 +107,10 @@
             android:name=".Activities.PesquisaActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".Activities.EstatisticaActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

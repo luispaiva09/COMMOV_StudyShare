@@ -83,6 +83,10 @@ class AddDiscussaoActivity : BaseActivity() {
                     startActivity(Intent(this, PesquisaActivity::class.java))
                     true
                 }
+                R.id.nav_estatisticas -> {
+                    startActivity(Intent(this, EstatisticaActivity::class.java))
+                    true
+                }
                 else -> false
             }
         }

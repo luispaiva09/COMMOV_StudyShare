@@ -58,7 +58,7 @@ class PerfilActivity : BaseActivity() {
             viewModel.getUtilizadorById(userId)
         }
 
-        // Observers
+        // Observers (mantidos como já tens)
         lifecycleScope.launchWhenStarted {
             viewModel.utilizadorPerfil.collect { utilizador ->
                 utilizador?.let { updateUI(it) }
@@ -102,11 +102,17 @@ class PerfilActivity : BaseActivity() {
                 R.id.nav_sessoes -> startActivity(Intent(this, MySessoesEstudoActivity::class.java))
                 R.id.nav_categorias -> startActivity(Intent(this, AllCategoriasActivity::class.java))
                 R.id.nav_pesquisar -> startActivity(Intent(this, PesquisaActivity::class.java))
+                R.id.nav_estatisticas -> {
+                    startActivity(Intent(this, EstatisticaActivity::class.java))
+                    true
+                }
+                else -> return@setNavigationItemSelectedListener false
             }
             drawer.closeDrawer(GravityCompat.START)
             true
         }
     }
+
 
     private fun updateUI(utilizador: com.example.studyshare.DataClasses.Utilizador) {
         binding.editTextNumero.setText(utilizador.id.toString())

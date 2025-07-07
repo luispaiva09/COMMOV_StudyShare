@@ -1,9 +1,11 @@
 package com.example.studyshare.Activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.example.studyshare.R
 import com.example.studyshare.Repositories.UtilizadorRepository
 import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
@@ -66,5 +68,30 @@ class EditarPerfilActivity : BaseActivity() {
                 Toast.makeText(this, "Preenche todos os campos corretamente.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.navigationViewEditarPerfil.setNavigationItemSelectedListener { menuItem ->
+            val drawer = binding.drawerLayoutEditarPerfil
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+                    sharedPref.edit().clear().apply()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                }
+                R.id.nav_inicio -> startActivity(Intent(this, InicioActivity::class.java))
+                R.id.nav_materiais -> startActivity(Intent(this, MyMateriaisActivity::class.java))
+                R.id.nav_discussoes -> startActivity(Intent(this, MyDiscussoesActivity::class.java))
+                R.id.nav_sessoes -> startActivity(Intent(this, MySessoesEstudoActivity::class.java))
+                R.id.nav_categorias -> startActivity(Intent(this, AllCategoriasActivity::class.java))
+                R.id.nav_pesquisar -> startActivity(Intent(this, PesquisaActivity::class.java))
+                R.id.nav_estatisticas -> {
+                    startActivity(Intent(this, EstatisticaActivity::class.java))
+                    true
+                }
+                else -> return@setNavigationItemSelectedListener false
+            }
+            drawer.closeDrawer(androidx.core.view.GravityCompat.START)
+            true
+        }
     }
+
 }
