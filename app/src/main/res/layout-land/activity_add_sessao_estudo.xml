@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayoutAddSessao"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Conteúdo principal -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Include do header -->
+        <include
+            android:id="@+id/headerLayoutAddSessao"
+            layout="@layout/header" />
+
+        <!-- Conteúdo rolável -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etTituloSessao"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Título da Sessão"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/etDescricaoSessao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descrição (opcional)"
+                    android:minLines="3"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine" />
+
+                <EditText
+                    android:id="@+id/etDataHoraSessao"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Data e Hora (YYYY-MM-DD HH:MM)"
+                    android:inputType="datetime" />
+
+                <Button
+                    android:id="@+id/buttonSubmeterSessao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Submeter Sessão"
+                    android:layout_marginTop="24dp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationViewAddSessao"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

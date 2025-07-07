@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título da Sessão"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/tvDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrição da Sessão"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tvDataHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Data e Hora"
+        android:textSize="12sp"
+        android:layout_marginTop="6dp"
+        android:textColor="#666666" />
+
+    <TextView
+        android:id="@+id/tvEstadoSessao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado da Sessão"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:textColor="#666666" />
+
+</LinearLayout>
