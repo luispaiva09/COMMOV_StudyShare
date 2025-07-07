@@ -114,7 +114,7 @@ class AddMaterialActivity : BaseActivity() {
                 if (sucesso == true) {
                     Toast.makeText(this@AddMaterialActivity, "Material adicionado com sucesso!", Toast.LENGTH_LONG).show()
                     limparCampos()
-                    val intent = Intent(this@AddMaterialActivity, InicioActivity::class.java)
+                    val intent = Intent(this@AddMaterialActivity, MyMateriaisActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

@@ -96,7 +96,7 @@ class AddDiscussaoActivity : BaseActivity() {
                 if (sucesso == true) {
                     Toast.makeText(this@AddDiscussaoActivity, "Discussão criada com sucesso!", Toast.LENGTH_LONG).show()
                     limparCampos()
-                    startActivity(Intent(this@AddDiscussaoActivity, InicioActivity::class.java))
+                    startActivity(Intent(this@AddDiscussaoActivity, MyDiscussoesActivity::class.java))
                     finish()
                 }
             }

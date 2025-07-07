@@ -109,6 +109,8 @@ class MyDiscussoesActivity : BaseActivity() {
             }
         }
 
+        binding.tvTitulo.text = "As Minhas Discussões"
+
         binding.buttonAddDiscussao.setOnClickListener {
             val intent = Intent(this, AddDiscussaoActivity::class.java)
             startActivity(intent)

@@ -89,7 +89,7 @@ class AddSessaoEstudoActivity : BaseActivity() {
                 if (sucesso == true) {
                     Toast.makeText(this@AddSessaoEstudoActivity, "Sessão criada com sucesso!", Toast.LENGTH_LONG).show()
                     limparCampos()
-                    startActivity(Intent(this@AddSessaoEstudoActivity, InicioActivity::class.java))
+                    startActivity(Intent(this@AddSessaoEstudoActivity, MySessoesEstudoActivity::class.java))
                     finish()
                 }
             }

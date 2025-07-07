@@ -109,6 +109,8 @@ class MySessoesEstudoActivity : BaseActivity() {
             }
         }
 
+        binding.tvTitulo.text = "As Minhas Sessões de Estudo"
+
         binding.buttonAddSessoesEstudo.setOnClickListener {
             val intent = Intent(this, AddSessaoEstudoActivity::class.java)
             startActivity(intent)
