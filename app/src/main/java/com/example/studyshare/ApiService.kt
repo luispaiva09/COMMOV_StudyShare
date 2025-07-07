@@ -18,6 +18,7 @@ import retrofit2.http.Headers
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class LoginRequest(
@@ -145,15 +146,18 @@ interface ApiService {
     suspend fun getEstatisticas(): List<Estatistica>
 
     @GET("estatisticas")
-    suspend fun getEstatisticaById(@Query("id") id: String): List<Estatistica>
+    suspend fun getEstatisticaById(@Query("utilizador_id") utilizadorId: String): List<Estatistica>
 
-    @Headers("Prefer: return=representation")
+    @PUT("estatisticas/{userId}")
+    suspend fun updateEstatistica(
+        @Path("userId") userId: Int,
+        @Body estatistica: Estatistica
+    ): Response<Unit>
+
     @POST("estatisticas")
-    suspend fun createEstatistica(@Body estatistica: Estatistica): List<Estatistica>
-
-    @DELETE("estatisticas")
-    suspend fun deleteEstatistica(@Query("id") id: String): Response<Unit>
-
+    suspend fun createEstatistica(
+        @Body estatistica: Estatistica
+    ): Estatistica
 
     // SESSOES ESTUDO
 

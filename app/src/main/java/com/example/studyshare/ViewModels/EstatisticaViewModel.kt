@@ -1,5 +1,6 @@
 package com.example.studyshare.ViewModels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.studyshare.DataClasses.Estatistica
@@ -32,36 +33,81 @@ class EstatisticaViewModel(private val repository: EstatisticaRepository) : View
         }
     }
 
-    fun carregarEstatisticaPorId(id: Int) {
+    fun carregarEstatisticaPorId(userId: Int) {
         viewModelScope.launch {
             try {
-                _estatisticaSelecionada.value = repository.getEstatisticaById(id)
+                val estat = repository.getEstatisticaById(userId)
+                Log.d("EstatisticaVM", "Estatística carregada: $estat")
+                _estatisticaSelecionada.value = estat
             } catch (e: Exception) {
                 _erroMensagem.value = "Erro ao carregar estatística: ${e.message}"
             }
         }
     }
 
-    fun criarEstatistica(estatistica: Estatistica) {
+    private suspend fun garantirEstatistica(userId: Int): Estatistica {
+        val estatisticaExistente = repository.getEstatisticaById(userId)
+        if (estatisticaExistente == null) {
+            val nova = Estatistica(
+                utilizador_id = userId,
+                comentarios_feitos = 0,
+                materiais_partilhados = 0,
+                materiais_visualizados = 0,
+                horas_em_sessoes = 0.0
+            )
+            return repository.createEstatistica(nova)
+        }
+        return estatisticaExistente
+    }
+
+    fun incrementarComentariosFeitos(userId: Int) {
         viewModelScope.launch {
             try {
-                repository.criarEstatistica(estatistica)
-                _estatisticaCriada.value = true
-                carregarEstatisticas()
+                val atual = garantirEstatistica(userId)
+                val nova = atual.copy(comentarios_feitos = atual.comentarios_feitos + 1)
+                repository.updateEstatistica(userId, nova)
+                _estatisticaSelecionada.value = nova
             } catch (e: Exception) {
-                _erroMensagem.value = "Erro ao criar estatística: ${e.message}"
-                _estatisticaCriada.value = false
+                _erroMensagem.value = "Erro ao incrementar comentários: ${e.message}"
             }
         }
     }
 
-    fun apagarEstatistica(id: Int) {
+    fun incrementarMateriaisPartilhados(userId: Int) {
         viewModelScope.launch {
             try {
-                repository.apagarEstatistica(id)
-                carregarEstatisticas()
+                val atual = garantirEstatistica(userId)
+                val nova = atual.copy(materiais_partilhados = atual.materiais_partilhados + 1)
+                repository.updateEstatistica(userId, nova)
+                _estatisticaSelecionada.value = nova
             } catch (e: Exception) {
-                _erroMensagem.value = "Erro ao apagar estatística: ${e.message}"
+                _erroMensagem.value = "Erro ao incrementar materiais partilhados: ${e.message}"
+            }
+        }
+    }
+
+    fun incrementarMateriaisVisualizados(userId: Int) {
+        viewModelScope.launch {
+            try {
+                val atual = garantirEstatistica(userId)
+                val nova = atual.copy(materiais_visualizados = atual.materiais_visualizados + 1)
+                repository.updateEstatistica(userId, nova)
+                _estatisticaSelecionada.value = nova
+            } catch (e: Exception) {
+                _erroMensagem.value = "Erro ao incrementar materiais visualizados: ${e.message}"
+            }
+        }
+    }
+
+    fun incrementarHorasEmSessoes(userId: Int, horasASomar: Double) {
+        viewModelScope.launch {
+            try {
+                val atual = garantirEstatistica(userId)
+                val nova = atual.copy(horas_em_sessoes = atual.horas_em_sessoes + horasASomar)
+                repository.updateEstatistica(userId, nova)
+                _estatisticaSelecionada.value = nova
+            } catch (e: Exception) {
+                _erroMensagem.value = "Erro ao incrementar horas em sessões: ${e.message}"
             }
         }
     }
@@ -70,3 +116,4 @@ class EstatisticaViewModel(private val repository: EstatisticaRepository) : View
         _erroMensagem.value = null
     }
 }
+

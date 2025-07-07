@@ -18,7 +18,9 @@ import com.example.studyshare.Repositories.UtilizadorRepository
 import com.example.studyshare.RetrofitClient
 import com.example.studyshare.ViewModelFactories.ComentarioViewModelFactory
 import com.example.studyshare.ViewModelFactories.UtilizadorViewModelFactory
+import com.example.studyshare.ViewModelFactories.EstatisticaViewModelFactory
 import com.example.studyshare.ViewModels.ComentarioViewModel
+import com.example.studyshare.ViewModels.EstatisticaViewModel
 import com.example.studyshare.ViewModels.UtilizadorViewModel
 import com.example.studyshare.databinding.ActivityMaterialDetalheBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -35,6 +37,7 @@ class MaterialDetalheActivity : BaseActivity() {
     private lateinit var comentarioAdapter: ComentarioAdapter
     private lateinit var comentarioViewModel: ComentarioViewModel
     private lateinit var utilizadorViewModel: UtilizadorViewModel
+    private lateinit var estatisticaViewModel: EstatisticaViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +50,9 @@ class MaterialDetalheActivity : BaseActivity() {
         )
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-        val autorId = sharedPref.getInt("userId", -1)
-        if (autorId == -1) {
+        val userId = sharedPref.getInt("userId", -1)  // <-- Aqui renomeado
+
+        if (userId == -1) {
             Toast.makeText(this, "Erro: usuário não autenticado!", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -142,7 +146,7 @@ class MaterialDetalheActivity : BaseActivity() {
             finish()
         }
 
-        // Repositórios e ViewModels
+        // Inicializar Repositórios e ViewModels
         val comentarioRepository = ComentarioRepository(RetrofitClient.api)
         comentarioViewModel = ViewModelProvider(this, ComentarioViewModelFactory(comentarioRepository))
             .get(ComentarioViewModel::class.java)
@@ -150,6 +154,10 @@ class MaterialDetalheActivity : BaseActivity() {
         val utilizadorRepository = UtilizadorRepository(RetrofitClient.api)
         utilizadorViewModel = ViewModelProvider(this, UtilizadorViewModelFactory(utilizadorRepository))
             .get(UtilizadorViewModel::class.java)
+
+        val estatisticaRepository = com.example.studyshare.Repositories.EstatisticaRepository(RetrofitClient.api)
+        estatisticaViewModel = ViewModelProvider(this, EstatisticaViewModelFactory(estatisticaRepository))
+            .get(EstatisticaViewModel::class.java)
 
         utilizadorViewModel.getUtilizadores()
 
@@ -200,13 +208,15 @@ class MaterialDetalheActivity : BaseActivity() {
             val novoComentario = Comentario(
                 id = null,
                 material_id = materialId,
-                autor_id = autorId,
+                autor_id = userId, // usa a variável userId
                 mensagem = mensagem,
                 data = dataAtual,
                 avaliacao_pontos = if (avaliacao > 0f) avaliacao else null
             )
 
             comentarioViewModel.criarComentario(novoComentario)
+
+            estatisticaViewModel.incrementarComentariosFeitos(userId)
 
             // Limpar inputs
             binding.etMensagemComentario.text.clear()
