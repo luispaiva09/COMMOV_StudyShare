@@ -25,6 +25,24 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddSessoesEstudo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/desc_add_ses"
+            android:src="@drawable/cruz_cinzenta"
+            app:backgroundTint="#FFD600"
+            app:tint="@android:color/white" />
+
+    </RelativeLayout>
+
     <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationViewMySessoesEstudo"

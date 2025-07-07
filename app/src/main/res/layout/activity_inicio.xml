@@ -41,38 +41,6 @@
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="32dp" />
 
-                <Button
-                    android:id="@+id/buttonContinuar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar Material"
-                    android:layout_marginTop="16dp"
-                    android:padding="12dp" />
-
-                <Button
-                    android:id="@+id/buttonCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar Categoria"
-                    android:layout_marginTop="16dp"
-                    android:padding="12dp" />
-
-                <Button
-                    android:id="@+id/buttonAddDiscussao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar Discussao"
-                    android:layout_marginTop="16dp"
-                    android:padding="12dp" />
-
-                <Button
-                    android:id="@+id/buttonAddSessaoEstudo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Adicionar Sessão de Estudo"
-                    android:layout_marginTop="16dp"
-                    android:padding="12dp" />
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

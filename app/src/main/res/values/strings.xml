@@ -15,5 +15,9 @@
     <string name="TitleEstatisticas">Estatísticas</string>
     <string name="TitleSobre">Sobre</string>
     <string name="TitleLogout">Logout</string>
+    <string name="desc_add_mat">Adicionar Material</string>
+    <string name="desc_add_cat">Adicionar Categoria</string>
+    <string name="desc_add_disc">Adicionar Discussão</string>
+    <string name="desc_add_ses">Adicionar Sessão de Estudo</string>
 
 </resources>

@@ -25,26 +25,6 @@ class InicioActivity : BaseActivity() {
 
         binding.textViewWelcome.text = "Bem-vindo, $username!"
 
-        binding.buttonContinuar.setOnClickListener {
-            val intent = Intent(this, AddMaterialActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonCategoria.setOnClickListener {
-            val intent = Intent(this, AddCategoriaActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonAddDiscussao.setOnClickListener {
-            val intent = Intent(this, AddDiscussaoActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.buttonAddSessaoEstudo.setOnClickListener {
-            val intent = Intent(this, AddSessaoEstudoActivity::class.java)
-            startActivity(intent)
-        }
-
         binding.navigationViewInicio.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {

@@ -104,6 +104,11 @@ class AllCategoriasActivity : BaseActivity() {
             }
         }
 
+        binding.buttonAddCategoria.setOnClickListener {
+            val intent = Intent(this, AddCategoriaActivity::class.java)
+            startActivity(intent)
+        }
+
         viewModel.carregarCategorias()
     }
 }

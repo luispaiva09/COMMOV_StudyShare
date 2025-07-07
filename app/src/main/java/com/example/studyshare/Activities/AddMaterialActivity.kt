@@ -302,7 +302,24 @@ class AddMaterialActivity : BaseActivity() {
             val bytes = inputStream.readBytes()
             inputStream.close()
 
-            val fileName = uri.lastPathSegment?.substringAfterLast('/') ?: "file_${System.currentTimeMillis()}"
+            val Nomeoriginal = uri.lastPathSegment?.substringAfterLast('/') ?: "file"
+            val extensao = if (Nomeoriginal.contains(".")) {
+                Nomeoriginal.substringAfterLast(".")
+            } else {
+                ""
+            }
+
+            val nomeBase = if (Nomeoriginal.contains(".")) {
+                Nomeoriginal.substringBeforeLast(".")
+            } else {
+                Nomeoriginal
+            }
+
+            val fileName = if (extensao.isNotEmpty()) {
+                "${nomeBase}_${System.currentTimeMillis()}.$extensao"
+            } else {
+                "${nomeBase}_${System.currentTimeMillis()}"
+            }
 
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -326,6 +343,7 @@ class AddMaterialActivity : BaseActivity() {
             if (response.isSuccessful) {
                 "https://zktwurzgnafkwxqfwmjj.supabase.co/storage/v1/object/public/ficheiros/$fileName"
             } else {
+                Log.e("AddMaterialActivity", "Erro upload ficheiro: ${response.body?.string()}")
                 null
             }
         } catch (e: Exception) {

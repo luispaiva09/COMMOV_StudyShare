@@ -114,7 +114,6 @@ class MyMateriaisActivity : BaseActivity() {
 
     private fun setupRecyclerView() {
         materialAdapter = MaterialAdapter { material ->
-            // 👉 Abre o detalhe com Intent e putExtra
             val intent = Intent(this, MaterialDetalheActivity::class.java)
             intent.putExtra("material_id", material.id)
             intent.putExtra("titulo", material.titulo)
@@ -122,7 +121,11 @@ class MyMateriaisActivity : BaseActivity() {
             intent.putExtra("imagem_capa_url", material.imagem_capa_url)
             intent.putExtra("ficheiro_url", material.ficheiro_url)
             intent.putExtra("privado", material.privado)
-            // Se quiser passar a categoria, precisa garantir que tenha ela
+            startActivity(intent)
+        }
+
+        binding.buttonAddMaterial.setOnClickListener {
+            val intent = Intent(this, AddMaterialActivity::class.java)
             startActivity(intent)
         }
 

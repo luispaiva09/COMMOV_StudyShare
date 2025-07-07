@@ -108,6 +108,12 @@ class MyDiscussoesActivity : BaseActivity() {
                 }
             }
         }
+
+        binding.buttonAddDiscussao.setOnClickListener {
+            val intent = Intent(this, AddDiscussaoActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun setupRecyclerView() {

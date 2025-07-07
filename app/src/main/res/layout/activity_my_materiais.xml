@@ -15,6 +15,8 @@
             android:id="@+id/headerLayout"
             layout="@layout/header" />
 
+
+
         <!-- Lista de materiais -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMateriais"
@@ -24,6 +26,24 @@
             android:clipToPadding="false" />
 
     </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/buttonAddMaterial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/desc_add_mat"
+            android:src="@drawable/cruz_cinzenta"
+            app:backgroundTint="#FFD600"
+            app:tint="@android:color/white" />
+
+    </RelativeLayout>
 
     <!-- Navigation Drawer -->
     <com.google.android.material.navigation.NavigationView

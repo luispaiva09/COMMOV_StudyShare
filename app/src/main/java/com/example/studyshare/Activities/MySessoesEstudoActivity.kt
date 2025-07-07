@@ -108,6 +108,12 @@ class MySessoesEstudoActivity : BaseActivity() {
                 }
             }
         }
+
+        binding.buttonAddSessoesEstudo.setOnClickListener {
+            val intent = Intent(this, AddSessaoEstudoActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun setupRecyclerView() {
