@@ -80,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:text="Guardar Alterações"
                     android:layout_marginTop="24dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
             </LinearLayout>
         </ScrollView>

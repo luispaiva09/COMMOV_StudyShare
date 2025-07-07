@@ -64,14 +64,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Entrar na Videochamada"
-                    android:enabled="false" />
+                    android:enabled="false"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
                 <Button
                     android:id="@+id/buttonCriarVideochamada"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Criar/Atualizar Videochamada"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
                 <Button
                     android:id="@+id/btnVoltar"
@@ -79,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:text="Voltar"
                     android:layout_marginTop="24dp"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="@color/gph_dark_grey"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

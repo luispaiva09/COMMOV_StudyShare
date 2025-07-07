@@ -29,7 +29,6 @@ class AddCategoriaActivity : BaseActivity() {
         binding = ActivityAddCategoriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Setup do cabeçalho
         setupHeader(
             headerLayout = binding.headerLayout.root,
             drawerLayout = binding.drawerLayoutAddCategoria
@@ -37,7 +36,6 @@ class AddCategoriaActivity : BaseActivity() {
 
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
 
-        // Setup do Navigation Drawer
         binding.navigationViewAddCategoria.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {

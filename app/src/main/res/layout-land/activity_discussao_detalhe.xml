@@ -41,7 +41,8 @@
                 android:id="@+id/btnEnviarMensagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enviar" />
+                android:text="Enviar"
+                android:backgroundTint="@color/gph_dark_grey"/>
         </LinearLayout>
     </LinearLayout>
 

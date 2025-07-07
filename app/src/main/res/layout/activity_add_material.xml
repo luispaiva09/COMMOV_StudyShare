@@ -43,20 +43,21 @@
                     android:hint="Descrição (opcional)"
                     android:inputType="textMultiLine" />
 
-                <!-- Botão para escolher a imagem de capa -->
                 <Button
                     android:id="@+id/buttonEscolherImagem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Escolher Imagem de Capa"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
                 <Button
                     android:id="@+id/buttonEscolherFicheiros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Escolher Ficheiros" />
+                    android:text="Escolher Ficheiros"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
                 <TextView
                     android:id="@+id/textViewFicheirosSelecionados"
@@ -85,7 +86,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Submeter Material"
-                    android:layout_marginTop="24dp" />
+                    android:layout_marginTop="24dp"
+                    android:backgroundTint="@color/gph_dark_grey"/>
 
             </LinearLayout>
         </ScrollView>
