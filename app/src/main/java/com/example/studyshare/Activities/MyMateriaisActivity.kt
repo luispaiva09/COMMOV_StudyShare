@@ -124,6 +124,8 @@ class MyMateriaisActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        binding.tvTitulo.text = "Os Meus Materiais"
+
         binding.buttonAddMaterial.setOnClickListener {
             val intent = Intent(this, AddMaterialActivity::class.java)
             startActivity(intent)

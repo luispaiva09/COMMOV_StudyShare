@@ -80,21 +80,21 @@ class AddCategoriaActivity : BaseActivity() {
             }
         }
 
-        // Observa criação de categoria
+
         lifecycleScope.launch {
             viewModel.categoriaCriada.collectLatest { sucesso ->
                 sucesso?.let {
                     if (it) {
                         Toast.makeText(this@AddCategoriaActivity, getString(R.string.avisoCatSuccess), Toast.LENGTH_LONG).show()
                         limparCampos()
-                        startActivity(Intent(this@AddCategoriaActivity, InicioActivity::class.java))
+                        startActivity(Intent(this@AddCategoriaActivity, AllCategoriasActivity::class.java))
                         finish()
                     }
                 }
             }
         }
 
-        // Observa erros
+
         lifecycleScope.launch {
             viewModel.erroMensagem.collectLatest { erro ->
                 erro?.let {

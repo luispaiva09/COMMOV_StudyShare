@@ -15,7 +15,13 @@
             android:id="@+id/headerLayout"
             layout="@layout/header" />
 
-
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
 
         <!-- Lista de materiais -->
         <androidx.recyclerview.widget.RecyclerView
